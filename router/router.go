@@ -29,6 +29,8 @@ func Router() {
 		v1.POST("/category", category.CreateCategoryItem(db))
 		v1.GET("/category", category.GetAllCategoryItems(db))
 		v1.GET("/category/:id", category.GetDetailCategoryItem(db))
+		v1.PUT("/category/:id", category.UpdatesCategoryItem(db))
+		v1.DELETE("/category/:id", category.DeleteCategoryItem(db))
 	}
 
 	router.Run()

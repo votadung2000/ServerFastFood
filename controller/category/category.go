@@ -53,7 +53,7 @@ func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 			paging.Limit = 10
 		}
 
-		offset := paging.Page * paging.Limit
+		offset := (paging.Page - 1) * paging.Limit
 
 		var result []models.Categories
 
@@ -88,5 +88,50 @@ func GetDetailCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		}
 
 		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
+	}
+}
+
+func UpdatesCategoryItem(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		id, err := strconv.Atoi(context.Param("id"))
+
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		var categoryItem models.Categories
+
+		if err := context.ShouldBind(&categoryItem); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		if err := data.Where("id = ?", id).Updates(&categoryItem).First(&categoryItem).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
+	}
+}
+
+func DeleteCategoryItem(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		id, err := strconv.Atoi(context.Param("id"))
+
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		if err := data.Table(models.Categories{}.TableCategory()).
+			Where("id = ?", id).
+			Delete(nil).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": true})
 	}
 }
