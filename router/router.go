@@ -27,6 +27,7 @@ func Router() {
 	v1 := router.Group("/v1")
 	{
 		v1.POST("/category", category.CreateCategoryItem(db))
+		v1.GET("/category", category.GetAllCategoryItem(db))
 	}
 
 	router.Run()
