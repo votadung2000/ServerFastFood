@@ -2,6 +2,7 @@ package category
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"example.com/m/models"
@@ -11,31 +12,31 @@ import (
 
 func CreateCategoryItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var categoryItems models.Categories
+		var categoryItem models.Categories
 
-		if err := context.ShouldBind(&categoryItems); err != nil {
+		if err := context.ShouldBind(&categoryItem); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 			return
 		}
 
 		// Name
-		categoryItems.Name = strings.TrimSpace(categoryItems.Name)
+		categoryItem.Name = strings.TrimSpace(categoryItem.Name)
 
-		if categoryItems.Name == "" {
+		if categoryItem.Name == "" {
 			context.JSON(http.StatusBadRequest, gin.H{"Error": "Name cannot be blank"})
 			return
 		}
 
-		if err := data.Select("Name").Create(&categoryItems).Error; err != nil {
+		if err := data.Select("Name").Create(&categoryItem).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": categoryItems})
+		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
 	}
 }
 
-func GetAllCategoryItem(data *gorm.DB) gin.HandlerFunc {
+func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var paging models.FormatGetList
 
@@ -67,5 +68,25 @@ func GetAllCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		}
 
 		context.JSON(http.StatusOK, gin.H{"data": result})
+	}
+}
+
+func GetDetailCategoryItem(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		var categoryItem models.Categories
+
+		id, err := strconv.Atoi(context.Param("id"))
+
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		if err := data.Where("id = ?", id).First(&categoryItem).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
 	}
 }
