@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -13,7 +14,12 @@ import (
 func Router() {
 	env := os.Getenv("API_HOST")
 
+	fmt.Println("env", env)
+
 	dsn := "root:pass-server-mysql@tcp(" + env + ":3306)/go_fast_food_db?charset=utf8mb4&parseTime=True&loc=Local"
+
+	fmt.Println("dsn", dsn)
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
