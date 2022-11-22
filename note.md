@@ -18,3 +18,8 @@ Create Go.sum
 ```
 go mod tidy
 ```
+
+Create .ENV
+```
+go get github.com/joho/godotenv
+```
