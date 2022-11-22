@@ -19,6 +19,6 @@ func Connections() *gorm.DB {
 		log.Fatalln("Cannot connect to MySQL:", err)
 	}
 
-	log.Println("Connected to MySQL:", db)
+	log.Println("Connected To MySQL Success")
 	return db
 }
