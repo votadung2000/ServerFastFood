@@ -3,8 +3,8 @@ package category
 import (
 	"net/http"
 	"strconv"
-	"strings"
 
+	"example.com/m/components"
 	"example.com/m/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -15,20 +15,20 @@ func CreateCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		var categoryItem models.Categories
 
 		if err := context.ShouldBind(&categoryItem); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
 		// Name
-		categoryItem.Name = strings.TrimSpace(categoryItem.Name)
+		categoryItem.Name = components.Sanitize(categoryItem.Name)
 
 		if categoryItem.Name == "" {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": "Name cannot be blank"})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": "Name cannot be blank"})
 			return
 		}
 
 		if err := data.Select("Name").Create(&categoryItem).Error; err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -41,7 +41,7 @@ func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 		var paging models.FormatGetList
 
 		if err := context.ShouldBind(&paging); err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -63,7 +63,7 @@ func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 			Offset(offset).
 			Order("id desc").
 			Find(&result).Error; err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -78,12 +78,12 @@ func GetDetailCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		id, err := strconv.Atoi(context.Param("id"))
 
 		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
 		if err := data.Where("id = ?", id).First(&categoryItem).Error; err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -96,7 +96,7 @@ func UpdatesCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		id, err := strconv.Atoi(context.Param("id"))
 
 		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -108,7 +108,7 @@ func UpdatesCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		}
 
 		if err := data.Where("id = ?", id).Updates(&categoryItem).First(&categoryItem).Error; err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
@@ -121,14 +121,14 @@ func DeleteCategoryItem(data *gorm.DB) gin.HandlerFunc {
 		id, err := strconv.Atoi(context.Param("id"))
 
 		if err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
 		if err := data.Table(models.Categories{}.TableCategory()).
 			Where("id = ?", id).
 			Delete(nil).Error; err != nil {
-			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
