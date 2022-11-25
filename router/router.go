@@ -15,7 +15,8 @@ func Router() {
 
 	v1 := router.Group("/v1")
 	{
-		v1.POST("/user", user.Register(db))
+		v1.POST("/user/login", user.HandleLogin(db))
+		v1.POST("/user/register", user.HandleRegister(db))
 		v1.GET("/user/:id", user.GetDetailUserItems(db))
 		// v1.PUT("/user/:id", user.UpdatesCategoryItem(db))
 		// v1.DELETE("/user/:id", user.DeleteCategoryItem(db))
