@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"example.com/m/auth"
 	"example.com/m/components"
 	"example.com/m/models"
 	"github.com/asaskevich/govalidator"
@@ -11,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func Register(data *gorm.DB) gin.HandlerFunc {
+func HandleRegister(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var userItem models.Users
 
@@ -28,10 +29,10 @@ func Register(data *gorm.DB) gin.HandlerFunc {
 		userItem.UserName = components.Sanitize(userItem.UserName)
 		userItem.PassWord = components.Sanitize(userItem.PassWord)
 
-		var otherUserItem []models.Users
+		var infoUserItem []models.Users
 
 		if err := data.Table(models.Users{}.TableUsers()).
-			Where("username = ?", userItem.UserName).First(&otherUserItem).Error; err == nil {
+			Where("username = ?", userItem.UserName).First(&infoUserItem).Error; err == nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": "User Already Exists"})
 			return
 		}
@@ -51,6 +52,49 @@ func Register(data *gorm.DB) gin.HandlerFunc {
 		}
 
 		context.JSON(http.StatusOK, gin.H{"data": userItem})
+	}
+}
+
+func HandleLogin(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		var userItem models.Users
+
+		if err := context.ShouldBind(&userItem); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			return
+		}
+
+		if govalidator.IsNull(userItem.UserName) || govalidator.IsNull(userItem.PassWord) {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": "Data Can Not Empty"})
+			return
+		}
+
+		userItem.UserName = components.Sanitize(userItem.UserName)
+		userItem.PassWord = components.Sanitize(userItem.PassWord)
+
+		var infoUserItem models.Users
+
+		if err := data.Table(models.Users{}.TableUsers()).
+			Where("username = ?", userItem.UserName).First(&infoUserItem).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": "Username Or Password Incorrect"})
+			return
+		}
+
+		errHash := components.CheckHash(infoUserItem.PassWord, userItem.PassWord)
+
+		if errHash != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": "Username Or Password Incorrect"})
+			return
+		}
+
+		token, errCreate := auth.CreateJWT(userItem.UserName)
+
+		if errCreate != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": "Internal Server Error"})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": token})
 	}
 }
 
