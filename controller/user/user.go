@@ -98,7 +98,7 @@ func HandleLogin(data *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func GetDetailUserItems(data *gorm.DB) gin.HandlerFunc {
+func GetDetailUserItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var userItem models.Users
 
@@ -117,5 +117,51 @@ func GetDetailUserItems(data *gorm.DB) gin.HandlerFunc {
 		}
 
 		context.JSON(http.StatusOK, gin.H{"data": userItem})
+	}
+}
+
+func UpdatesUserItem(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		id, err := strconv.Atoi(context.Param("id"))
+
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			return
+		}
+
+		var userItem models.Users
+
+		if err := context.ShouldBind(&userItem); err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			return
+		}
+
+		if err := data.Where("id = ?", id).
+			Updates(&userItem).
+			First(&userItem).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": userItem})
+	}
+}
+
+func DeleteUserItem(data *gorm.DB) gin.HandlerFunc {
+	return func(context *gin.Context) {
+		id, err := strconv.Atoi(context.Param("id"))
+
+		if err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+		}
+
+		if err := data.Table(models.Users{}.TableUsers()).
+			Where("id = ?", id).
+			Delete(nil).Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			return
+		}
+
+		context.JSON(http.StatusOK, gin.H{"data": true})
 	}
 }

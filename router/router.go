@@ -17,9 +17,9 @@ func Router() {
 	{
 		v1.POST("/user/login", user.HandleLogin(db))
 		v1.POST("/user/register", user.HandleRegister(db))
-		v1.GET("/user/:id", user.GetDetailUserItems(db))
-		// v1.PUT("/user/:id", user.UpdatesCategoryItem(db))
-		// v1.DELETE("/user/:id", user.DeleteCategoryItem(db))
+		v1.GET("/user/:id", user.GetDetailUserItem(db))
+		v1.PUT("/user/:id", user.UpdatesUserItem(db))
+		v1.DELETE("/user/:id", user.DeleteUserItem(db))
 	}
 	{
 		v1.POST("/category", category.CreateCategoryItem(db))
