@@ -4,39 +4,35 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/m/components"
 	"example.com/m/models"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func CreateCategoryItem(data *gorm.DB) gin.HandlerFunc {
+func CreateProduct(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var categoryItem models.Categories
+		var productItem models.Products
 
-		if err := context.ShouldBind(&categoryItem); err != nil {
+		if err := context.ShouldBind(&productItem); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		// Name
-		categoryItem.Name = components.Sanitize(categoryItem.Name)
-
-		if categoryItem.Name == "" {
+		if productItem.Name == "" {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": "Name cannot be blank"})
 			return
 		}
 
-		if err := data.Select("Name").Create(&categoryItem).Error; err != nil {
+		if err := data.Select("Name").Create(&productItem).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
+		context.JSON(http.StatusOK, gin.H{"data": productItem})
 	}
 }
 
-func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
+func GetAllProductItems(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		var paging models.FormatGetList
 
@@ -55,9 +51,9 @@ func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 
 		offset := (paging.Page - 1) * paging.Limit
 
-		var result []models.Categories
+		var result []models.Products
 
-		if err := data.Table(models.Categories{}.TableCategory()).
+		if err := data.Table(models.Products{}.TableProducts()).
 			Count(&paging.Total).
 			Limit(paging.Limit).
 			Offset(offset).
@@ -71,9 +67,9 @@ func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 	}
 }
 
-func GetDetailCategoryItem(data *gorm.DB) gin.HandlerFunc {
+func GetDetailProductItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var categoryItem models.Categories
+		var productItem models.Products
 
 		id, err := strconv.Atoi(context.Param("id"))
 
@@ -82,16 +78,16 @@ func GetDetailCategoryItem(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if err := data.Where("id = ?", id).First(&categoryItem).Error; err != nil {
+		if err := data.Where("id = ?", id).First(&productItem).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
+		context.JSON(http.StatusOK, gin.H{"data": productItem})
 	}
 }
 
-func UpdatesCategoryItem(data *gorm.DB) gin.HandlerFunc {
+func UpdatesProductItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		id, err := strconv.Atoi(context.Param("id"))
 
@@ -100,23 +96,23 @@ func UpdatesCategoryItem(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		var categoryItem models.Categories
+		var productItem models.Products
 
-		if err := context.ShouldBind(&categoryItem); err != nil {
+		if err := context.ShouldBind(&productItem); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
 			return
 		}
 
-		if err := data.Where("id = ?", id).Updates(&categoryItem).First(&categoryItem).Error; err != nil {
+		if err := data.Where("id = ?", id).Updates(&productItem).First(&productItem).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": categoryItem})
+		context.JSON(http.StatusOK, gin.H{"data": productItem})
 	}
 }
 
-func DeleteCategoryItem(data *gorm.DB) gin.HandlerFunc {
+func DeleteProductItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		id, err := strconv.Atoi(context.Param("id"))
 
@@ -125,7 +121,7 @@ func DeleteCategoryItem(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if err := data.Table(models.Categories{}.TableCategory()).
+		if err := data.Table(models.Products{}.TableProducts()).
 			Where("id = ?", id).
 			Delete(nil).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
