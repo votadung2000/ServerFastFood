@@ -94,7 +94,20 @@ func HandleLogin(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": token})
+		userDTO := models.UsersDTO{
+			Id:        infoUserItem.Id,
+			Name:      infoUserItem.Name,
+			UserName:  infoUserItem.UserName,
+			Status:    infoUserItem.Status,
+			Image:     infoUserItem.Image,
+			CreatedAt: infoUserItem.CreatedAt,
+			UpdatedAt: infoUserItem.UpdatedAt,
+			Token:     token,
+		}
+
+		userDTO.UsersDTO()
+
+		context.JSON(http.StatusOK, gin.H{"data": userDTO})
 	}
 }
 
