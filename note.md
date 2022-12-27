@@ -23,3 +23,8 @@ Create .ENV
 ```
 go get github.com/joho/godotenv
 ```
+
+Remove package not use
+```
+go mod tidy -v
+```
