@@ -11,7 +11,7 @@ import (
 
 func CreateProduct(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var productItem models.Products
+		var productItem models.Product
 
 		if err := context.ShouldBind(&productItem); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
@@ -34,42 +34,61 @@ func CreateProduct(data *gorm.DB) gin.HandlerFunc {
 
 func GetAllProductItems(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var paging models.FormatGetList
+		var filterP models.FormatGetListProducts
+		var responseClient models.FormatResponse
 
-		if err := context.ShouldBind(&paging); err != nil {
+		if err := context.ShouldBind(&filterP); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		if paging.Page <= 0 {
-			paging.Page = 1
+		if filterP.Page <= 0 {
+			filterP.Page = 1
 		}
 
-		if paging.Limit <= 0 {
-			paging.Limit = 10
+		if filterP.Limit <= 0 {
+			filterP.Limit = 10
 		}
 
-		offset := (paging.Page - 1) * paging.Limit
+		offset := (filterP.Page - 1) * filterP.Limit
 
-		var result []models.Products
+		var results []models.Product
 
-		if err := data.Table(models.Products{}.TableProducts()).
-			Count(&paging.Total).
-			Limit(paging.Limit).
-			Offset(offset).
-			Order("id desc").
-			Find(&result).Error; err != nil {
+		// ids := []int64{1, 2, 3, 4, 5}
+
+		resultGetAll := data.Table(models.Product{}.TableProducts())
+		resultGetAll.Where("status = ?", 1)
+		// resultGetAll.Where("id IN ?", ids)
+
+		if filterP.CategoryId > 0 {
+			resultGetAll.Where("category_id = ?", filterP.CategoryId)
+		}
+
+		if filterP.Name != "" {
+			resultGetAll.Where("name LIKE ?", "%"+filterP.Name+"%")
+		}
+
+		resultGetAll.Count(&filterP.Total)
+		resultGetAll.Limit(filterP.Limit)
+		resultGetAll.Offset(offset)
+		resultGetAll.Order("id desc")
+		resultGetAll.Find(&results)
+
+		if err := resultGetAll.Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": result})
+		responseClient.Total = filterP.Total
+		responseClient.Data = results
+
+		context.JSON(http.StatusOK, responseClient)
 	}
 }
 
 func GetDetailProductItem(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var productItem models.Products
+		var productItem models.Product
 
 		id, err := strconv.Atoi(context.Param("id"))
 
@@ -96,7 +115,7 @@ func UpdatesProductItem(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		var productItem models.Products
+		var productItem models.Product
 
 		if err := context.ShouldBind(&productItem); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
@@ -121,7 +140,7 @@ func DeleteProductItem(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		if err := data.Table(models.Products{}.TableProducts()).
+		if err := data.Table(models.Product{}.TableProducts()).
 			Where("id = ?", id).
 			Delete(nil).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})

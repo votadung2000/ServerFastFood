@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-type Products struct {
+type Product struct {
 	Id         int        `json:"id" gorm:"column:id;"`
 	Name       string     `json:"name" gorm:"column:name;"`
 	Status     int        `json:"status" gorm:"column:status;"` // Status: 1 - action, 2 - block
@@ -15,6 +15,6 @@ type Products struct {
 	UpdatedAt  *time.Time `json:"updated_at" gorm:"column:updated_at;"`
 }
 
-func (Products) TableProducts() string {
+func (Product) TableProducts() string {
 	return "products"
 }

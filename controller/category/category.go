@@ -38,36 +38,39 @@ func CreateCategoryItem(data *gorm.DB) gin.HandlerFunc {
 
 func GetAllCategoryItems(data *gorm.DB) gin.HandlerFunc {
 	return func(context *gin.Context) {
-		var paging models.FormatGetList
+		var filterC models.FormatGetList
+		var responseClient models.FormatResponse
 
-		if err := context.ShouldBind(&paging); err != nil {
+		if err := context.ShouldBind(&filterC); err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		if paging.Page <= 0 {
-			paging.Page = 1
+		if filterC.Page <= 0 {
+			filterC.Page = 1
 		}
 
-		if paging.Limit <= 0 {
-			paging.Limit = 10
+		if filterC.Limit <= 0 {
+			filterC.Limit = 10
 		}
 
-		offset := (paging.Page - 1) * paging.Limit
+		offset := (filterC.Page - 1) * filterC.Limit
 
 		var result []models.Categories
 
 		if err := data.Table(models.Categories{}.TableCategory()).
-			Count(&paging.Total).
-			Limit(paging.Limit).
+			Count(&filterC.Total).
+			Limit(filterC.Limit).
 			Offset(offset).
-			Order("id desc").
 			Find(&result).Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		context.JSON(http.StatusOK, gin.H{"data": result})
+		responseClient.Total = filterC.Total
+		responseClient.Data = result
+
+		context.JSON(http.StatusOK, responseClient)
 	}
 }
 
