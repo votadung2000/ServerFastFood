@@ -2,6 +2,7 @@ package router
 
 import (
 	category "example.com/m/controller/category"
+	favorite "example.com/m/controller/favorite"
 	product "example.com/m/controller/product"
 	"example.com/m/controller/user"
 	"example.com/m/database"
@@ -35,6 +36,11 @@ func Router() {
 		v1.GET("/product/:id", product.GetDetailProductItem(db))
 		v1.PUT("/product/:id", product.UpdatesProductItem(db))
 		v1.DELETE("/product/:id", product.DeleteProductItem(db))
+	}
+	{
+		v1.POST("/favorite", favorite.CreateFavorite(db))
+		v1.GET("/favorite", favorite.GetAllFavorites(db))
+		v1.POST("/favorite/:id", favorite.DeleteFavorite(db))
 	}
 
 	router.Run()
