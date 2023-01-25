@@ -19,6 +19,6 @@ type FormatResponse struct {
 
 type FormatGetFavorites struct {
 	FormatGetList
-	UserId    int `json:"user_id" gorm:"column:user_id;"`
-	ProductId int `json:"product_id" gorm:"column:product_id;"`
+	UserId    int `json:"user_id" form:"user_id"`
+	ProductId int `json:"product_id" form:"product_id"`
 }

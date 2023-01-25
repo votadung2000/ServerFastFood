@@ -1,7 +1,6 @@
 package favorite
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -53,23 +52,52 @@ func GetAllFavorites(data *gorm.DB) gin.HandlerFunc {
 
 		offset := (filterF.Page - 1) * filterF.Limit
 
-		var resultsFavorites []models.Favorite
+		var resultFavorites []models.Favorite
 
-		if err := data.Table(models.Favorite{}.TableFavorites()).
-			Where("user_id = ?", filterF.UserId).
-			Count(&filterF.Total).
-			Limit(filterF.Limit).
-			Offset(offset).
-			Order("id desc").
-			Find(&resultsFavorites).Error; err != nil {
+		proGetFavorites := data.Table(models.Favorite{}.TableFavorites())
+
+		if filterF.UserId > 0 {
+			proGetFavorites.Where("user_id = ?", filterF.UserId)
+		}
+
+		proGetFavorites.Count(&filterF.Total)
+		proGetFavorites.Limit(filterF.Limit)
+		proGetFavorites.Offset(offset)
+		proGetFavorites.Order("id desc")
+		proGetFavorites.Find(&resultFavorites)
+
+		if err := proGetFavorites.Error; err != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
 			return
 		}
 
-		fmt.Println("resultsFavorites", resultsFavorites)
+		ids := []int64{}
+
+		for _, item := range resultFavorites {
+			ids = append(ids, int64(item.Id))
+		}
+
+		var resultProducts []models.Product
+
+		proGetProducts := data.Table(models.Product{}.TableProducts())
+		proGetProducts.Where("status = ?", 1)
+
+		if int64(len(ids)) > 0 {
+			proGetProducts.Where("id IN ?", ids)
+		}
+
+		proGetProducts.Limit(filterF.Limit)
+		proGetProducts.Offset(offset)
+		proGetProducts.Order("id desc")
+		proGetProducts.Find(&resultProducts)
+
+		if err := proGetProducts.Error; err != nil {
+			context.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			return
+		}
 
 		responseClient.Total = filterF.Total
-		responseClient.Data = resultsFavorites
+		responseClient.Data = resultProducts
 
 		context.JSON(http.StatusOK, responseClient)
 	}
