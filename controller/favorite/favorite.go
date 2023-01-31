@@ -60,7 +60,7 @@ func GetAllFavorites(data *gorm.DB) gin.HandlerFunc {
 			proGetFavorites.Where("user_id = ?", filterF.UserId)
 		}
 
-		proGetFavorites.Count(&filterF.Total)
+		// proGetFavorites.Count(&filterF.Total)
 		proGetFavorites.Limit(filterF.Limit)
 		proGetFavorites.Offset(offset)
 		proGetFavorites.Order("id desc")
@@ -86,6 +86,11 @@ func GetAllFavorites(data *gorm.DB) gin.HandlerFunc {
 			proGetProducts.Where("id IN ?", ids)
 		}
 
+		if filterF.CategoryId > 0 {
+			proGetProducts.Where("category_id = ?", filterF.CategoryId)
+		}
+
+		proGetFavorites.Count(&filterF.Total)
 		proGetProducts.Limit(filterF.Limit)
 		proGetProducts.Offset(offset)
 		proGetProducts.Order("id desc")
