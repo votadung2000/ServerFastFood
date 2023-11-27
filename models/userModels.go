@@ -24,6 +24,7 @@ type UsersDTO struct {
 	CreatedAt *time.Time `json:"created_at" gorm:"column:created_at;"`
 	UpdatedAt *time.Time `json:"updated_at" gorm:"column:updated_at;"`
 	Token     string     `json:"token" gorm:"column:token;"`
+	RefToken  string     `json:"refresh_token" gorm:"column:refresh_token;"`
 }
 
 func (Users) TableUsers() string {

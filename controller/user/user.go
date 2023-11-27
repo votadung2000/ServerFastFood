@@ -37,7 +37,7 @@ func HandleRegister(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		passWord, errHash := components.Hash(userItem.PassWord)
+		passWord, errHash := components.HashPassword(userItem.PassWord)
 
 		if errHash != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": "Register Has Failed"})
@@ -80,14 +80,14 @@ func HandleLogin(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		errHash := components.CheckHash(infoUserItem.PassWord, userItem.PassWord)
+		errHash := components.CheckHashPassword(infoUserItem.PassWord, userItem.PassWord)
 
 		if errHash != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": "Username Or Password Incorrect"})
 			return
 		}
 
-		token, errCreate := auth.CreateJWT(userItem.UserName)
+		token, refreshToken, errCreate := auth.GenerateTokens(userItem.Id, userItem.UserName)
 
 		if errCreate != nil {
 			context.JSON(http.StatusBadRequest, gin.H{"Message": "Internal Server Error"})
@@ -103,6 +103,7 @@ func HandleLogin(data *gorm.DB) gin.HandlerFunc {
 			CreatedAt: infoUserItem.CreatedAt,
 			UpdatedAt: infoUserItem.UpdatedAt,
 			Token:     token,
+			RefToken:  refreshToken,
 		}
 
 		userDTO.UsersDTO()

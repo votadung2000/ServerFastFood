@@ -4,8 +4,9 @@ import (
 	category "example.com/m/controller/category"
 	favorite "example.com/m/controller/favorite"
 	product "example.com/m/controller/product"
-	"example.com/m/controller/user"
+	user "example.com/m/controller/user"
 	"example.com/m/database"
+	// "example.com/m/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,7 @@ func Router() {
 
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	// router.Use(middleware.Authentication())
 
 	v1 := router.Group("/v1")
 	{
@@ -23,6 +25,7 @@ func Router() {
 		v1.PUT("/user/:id", user.UpdatesUserItem(db))
 		v1.DELETE("/user/:id", user.DeleteUserItem(db))
 	}
+
 	{
 		v1.POST("/category", category.CreateCategoryItem(db))
 		v1.GET("/category", category.GetAllCategoryItems(db))
