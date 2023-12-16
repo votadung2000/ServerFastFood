@@ -1,4 +1,4 @@
-module example.com/m
+module fastFood
 
 go 1.19
 

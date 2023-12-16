@@ -1,12 +1,13 @@
 package router
 
 import (
-	category "example.com/m/controller/category"
-	favorite "example.com/m/controller/favorite"
-	product "example.com/m/controller/product"
-	user "example.com/m/controller/user"
-	"example.com/m/database"
-	// "example.com/m/middleware"
+	category "fastFood/controller/category"
+	favorite "fastFood/controller/favorite"
+	product "fastFood/controller/product"
+	user "fastFood/controller/user"
+	"fastFood/database"
+
+	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
 )
 
