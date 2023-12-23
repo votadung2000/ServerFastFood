@@ -1,7 +1,6 @@
 package router
 
 import (
-	category "fastFood/controller/category"
 	favorite "fastFood/controller/favorite"
 	product "fastFood/controller/product"
 	user "fastFood/controller/user"
@@ -33,7 +32,7 @@ func Router() {
 		v1.GET("/category", ginCategory.ListCategoryHandler(db))
 		v1.GET("/category/:id", ginCategory.FindCategoryHandler(db))
 		v1.PUT("/category/:id", ginCategory.UpdateCategoryHandler(db))
-		v1.DELETE("/category/:id", category.DeleteCategoryItem(db))
+		v1.DELETE("/category/:id", ginCategory.DeleteCategoryHandler(db))
 	}
 	{
 		v1.POST("/product", product.CreateProduct(db))

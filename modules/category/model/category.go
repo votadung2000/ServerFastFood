@@ -6,12 +6,14 @@ import (
 )
 
 const (
-	STATUS_ACTION = 1
-	STATUS_BLOCK  = -1
+	STATUS_ACTION  = 1
+	STATUS_BLOCK   = -1
+	STATUS_DELETED = -2
 )
 
 var (
 	ErrBlocked     = errors.New("the category has been blocked")
+	ErrDeleted     = errors.New("the category has been deleted")
 	ErrNameIsBlank = errors.New("name category cannot be blank")
 )
 
