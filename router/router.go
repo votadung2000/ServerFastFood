@@ -29,10 +29,10 @@ func Router() {
 	}
 
 	{
-		v1.POST("/category", category.CreateCategoryItem(db))
+		v1.POST("/category", ginCategory.CreateCategoryHandler(db))
 		v1.GET("/category", ginCategory.ListCategoryHandler(db))
 		v1.GET("/category/:id", ginCategory.FindCategoryHandler(db))
-		v1.PUT("/category/:id", category.UpdatesCategoryItem(db))
+		v1.PUT("/category/:id", ginCategory.UpdateCategoryHandler(db))
 		v1.DELETE("/category/:id", category.DeleteCategoryItem(db))
 	}
 	{

@@ -11,7 +11,8 @@ const (
 )
 
 var (
-	ErrBlocked = errors.New("the category has been blocked")
+	ErrBlocked     = errors.New("the category has been blocked")
+	ErrNameIsBlank = errors.New("name category cannot be blank")
 )
 
 type Category struct {
@@ -21,7 +22,7 @@ type Category struct {
 	Image  string `json:"image" gorm:"column:image;"`
 }
 
-func (Category) TableCategory() string {
+func (Category) TableName() string {
 	return "categories"
 }
 
@@ -31,6 +32,14 @@ type CategoryUpdate struct {
 	Image  string `json:"image" gorm:"column:image"`
 }
 
-func (CategoryUpdate) TableCategory() string {
-	return Category{}.TableCategory()
+func (CategoryUpdate) TableName() string {
+	return Category{}.TableName()
+}
+
+type CategoryCreate struct {
+	Name string `json:"name" gorm:"column:name"`
+}
+
+func (CategoryCreate) TableName() string {
+	return Category{}.TableName()
 }
