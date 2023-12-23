@@ -25,7 +25,7 @@ func (s *sqlStorage) ListCategory(
 		}
 	}
 
-	if err := db.Table(modelCategory.Category{}.TableCategory()).Count(&paging.Total).Error; err != nil {
+	if err := db.Table(modelCategory.Category{}.TableName()).Count(&paging.Total).Error; err != nil {
 		return nil, err
 	}
 
