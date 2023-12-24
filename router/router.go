@@ -1,12 +1,13 @@
 package router
 
 import (
-	category "example.com/m/controller/category"
-	favorite "example.com/m/controller/favorite"
-	product "example.com/m/controller/product"
-	user "example.com/m/controller/user"
-	"example.com/m/database"
-	// "example.com/m/middleware"
+	favorite "fastFood/controller/favorite"
+	user "fastFood/controller/user"
+	"fastFood/database"
+	ginCategory "fastFood/modules/category/transport/gin"
+	ginProduct "fastFood/modules/product/transport/gin"
+
+	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,18 +28,18 @@ func Router() {
 	}
 
 	{
-		v1.POST("/category", category.CreateCategoryItem(db))
-		v1.GET("/category", category.GetAllCategoryItems(db))
-		v1.GET("/category/:id", category.GetDetailCategoryItem(db))
-		v1.PUT("/category/:id", category.UpdatesCategoryItem(db))
-		v1.DELETE("/category/:id", category.DeleteCategoryItem(db))
+		v1.POST("/category", ginCategory.CreateCategoryHandler(db))
+		v1.GET("/category", ginCategory.ListCategoryHandler(db))
+		v1.GET("/category/:id", ginCategory.FindCategoryHandler(db))
+		v1.PUT("/category/:id", ginCategory.UpdateCategoryHandler(db))
+		v1.DELETE("/category/:id", ginCategory.DeleteCategoryHandler(db))
 	}
 	{
-		v1.POST("/product", product.CreateProduct(db))
-		v1.GET("/product", product.GetAllProductItems(db))
-		v1.GET("/product/:id", product.GetDetailProductItem(db))
-		v1.PUT("/product/:id", product.UpdatesProductItem(db))
-		v1.DELETE("/product/:id", product.DeleteProductItem(db))
+		v1.POST("/product", ginProduct.CreateProductHandler(db))
+		v1.GET("/product", ginProduct.ListProductHandler(db))
+		v1.GET("/product/:id", ginProduct.FindProductHandler(db))
+		v1.PUT("/product/:id", ginProduct.UpdateProductHandler(db))
+		v1.DELETE("/product/:id", ginProduct.DeleteProductHandler(db))
 	}
 	{
 		v1.POST("/favorite", favorite.CreateFavorite(db))

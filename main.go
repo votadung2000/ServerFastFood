@@ -3,7 +3,8 @@ package main
 import (
 	"log"
 
-	"example.com/m/router"
+	"fastFood/router"
+
 	"github.com/joho/godotenv"
 )
 
