@@ -5,6 +5,7 @@ import (
 	user "fastFood/controller/user"
 	"fastFood/database"
 	ginCategory "fastFood/modules/category/transport/gin"
+	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
 
 	// "fastFood/middleware"
@@ -42,9 +43,9 @@ func Router() {
 		v1.DELETE("/product/:id", ginProduct.DeleteProductHandler(db))
 	}
 	{
-		v1.POST("/favorite", favorite.CreateFavorite(db))
+		v1.POST("/favorite", ginFavorite.CreateFavoriteHandler(db))
 		v1.GET("/favorite", favorite.GetAllFavorites(db))
-		v1.POST("/favorite/:id", favorite.DeleteFavorite(db))
+		v1.DELETE("/favorite/:id", ginFavorite.DeleteFavoriteHandler(db))
 	}
 
 	router.Run()
