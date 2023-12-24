@@ -12,10 +12,11 @@ const (
 )
 
 var (
-	ErrBlocked      = errors.New("the product has been blocked")
-	ErrDeleted      = errors.New("the product has been deleted")
-	ErrNameIsBlank  = errors.New("name product cannot be blank")
-	ErrPriceIsBlank = errors.New("price product cannot be blank")
+	ErrBlocked         = errors.New("the product has been blocked")
+	ErrDeleted         = errors.New("the product has been deleted")
+	ErrNameIsBlank     = errors.New("name product cannot be blank")
+	ErrPriceIsBlank    = errors.New("price product cannot be blank")
+	ErrCategoryIsBlank = errors.New("category product cannot be blank")
 )
 
 type Product struct {
@@ -36,8 +37,9 @@ func (Product) TableName() string {
 }
 
 type ProductCreate struct {
-	Name  string `json:"name" gorm:"column:name;"`
-	Price int    `json:"price" gorm:"column:price;"`
+	Name       string `json:"name" gorm:"column:name;"`
+	Price      int    `json:"price" gorm:"column:price;"`
+	CategoryId int    `json:"category_id" gorm:"column:category_id;"`
 }
 
 func (ProductCreate) TableName() string {

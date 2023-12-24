@@ -38,7 +38,7 @@ func Router() {
 	{
 		v1.POST("/product", ginProduct.CreateProductHandler(db))
 		v1.GET("/product", product.GetAllProductItems(db))
-		v1.GET("/product/:id", product.GetDetailProductItem(db))
+		v1.GET("/product/:id", ginProduct.FindProductHandler(db))
 		v1.PUT("/product/:id", product.UpdatesProductItem(db))
 		v1.DELETE("/product/:id", product.DeleteProductItem(db))
 	}

@@ -24,6 +24,9 @@ func (biz *createProductBiz) CreateProduct(ctx context.Context, data *modelProdu
 	if data.Price == 0 {
 		return modelProduct.ErrPriceIsBlank
 	}
+	if data.CategoryId == 0 {
+		return modelProduct.ErrCategoryIsBlank
+	}
 
 	if err := biz.store.CreateProduct(ctx, data); err != nil {
 		return err
