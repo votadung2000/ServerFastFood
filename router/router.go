@@ -6,6 +6,7 @@ import (
 	user "fastFood/controller/user"
 	"fastFood/database"
 	ginCategory "fastFood/modules/category/transport/gin"
+	ginProduct "fastFood/modules/product/transport/gin"
 
 	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,7 @@ func Router() {
 		v1.DELETE("/category/:id", ginCategory.DeleteCategoryHandler(db))
 	}
 	{
-		v1.POST("/product", product.CreateProduct(db))
+		v1.POST("/product", ginProduct.CreateProductHandler(db))
 		v1.GET("/product", product.GetAllProductItems(db))
 		v1.GET("/product/:id", product.GetDetailProductItem(db))
 		v1.PUT("/product/:id", product.UpdatesProductItem(db))
