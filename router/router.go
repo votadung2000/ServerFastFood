@@ -40,7 +40,7 @@ func Router() {
 		v1.GET("/product", product.GetAllProductItems(db))
 		v1.GET("/product/:id", ginProduct.FindProductHandler(db))
 		v1.PUT("/product/:id", ginProduct.UpdateProductHandler(db))
-		v1.DELETE("/product/:id", product.DeleteProductItem(db))
+		v1.DELETE("/product/:id", ginProduct.DeleteProductHandler(db))
 	}
 	{
 		v1.POST("/favorite", favorite.CreateFavorite(db))
