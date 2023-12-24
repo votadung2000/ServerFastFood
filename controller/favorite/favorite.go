@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/m/models"
+	"fastFood/models"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )

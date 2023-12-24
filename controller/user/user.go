@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"example.com/m/auth"
-	"example.com/m/components"
-	"example.com/m/models"
+	"fastFood/auth"
+	"fastFood/components"
+	"fastFood/models"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
