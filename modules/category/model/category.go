@@ -14,7 +14,7 @@ const (
 var (
 	ErrBlocked     = errors.New("the category has been blocked")
 	ErrDeleted     = errors.New("the category has been deleted")
-	ErrNameIsBlank = errors.New("name category cannot be blank")
+	ErrNameIsBlank = errors.New("the name category cannot be blank")
 )
 
 type Category struct {
