@@ -32,14 +32,14 @@ func Router() {
 		v1.POST("/category", ginCategory.CreateCategoryHandler(db))
 		v1.GET("/category", ginCategory.ListCategoryHandler(db))
 		v1.GET("/category/:id", ginCategory.FindCategoryHandler(db))
-		v1.PUT("/category/:id", ginCategory.UpdateCategoryHandler(db))
+		v1.PATCH("/category/:id", ginCategory.UpdateCategoryHandler(db))
 		v1.DELETE("/category/:id", ginCategory.DeleteCategoryHandler(db))
 	}
 	{
 		v1.POST("/product", ginProduct.CreateProductHandler(db))
 		v1.GET("/product", ginProduct.ListProductHandler(db))
 		v1.GET("/product/:id", ginProduct.FindProductHandler(db))
-		v1.PUT("/product/:id", ginProduct.UpdateProductHandler(db))
+		v1.PATCH("/product/:id", ginProduct.UpdateProductHandler(db))
 		v1.DELETE("/product/:id", ginProduct.DeleteProductHandler(db))
 	}
 	{

@@ -47,12 +47,12 @@ func (ProductCreate) TableName() string {
 }
 
 type ProductUpdate struct {
-	Name     string `json:"name" gorm:"column:name;"`
-	Status   int    `json:"status" gorm:"column:status;"`
-	Image    string `json:"image" gorm:"column:image;"`
-	Taste    string `json:"taste" gorm:"column:taste;"`
-	Price    int    `json:"price" gorm:"column:price;"`
-	Discount int    `json:"discount" gorm:"column:discount;"`
+	Name     *string `json:"name" gorm:"column:name;"`
+	Status   *int    `json:"status" gorm:"column:status;"`
+	Image    *string `json:"image" gorm:"column:image;"`
+	Taste    *string `json:"taste" gorm:"column:taste;"`
+	Price    *int    `json:"price" gorm:"column:price;"`
+	Discount *int    `json:"discount" gorm:"column:discount;"`
 }
 
 func (ProductUpdate) TableName() string {
