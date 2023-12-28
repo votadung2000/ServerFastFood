@@ -18,14 +18,8 @@ func CreateProductBiz(store CreateProductStorage) *createProductBiz {
 }
 
 func (biz *createProductBiz) CreateProduct(ctx context.Context, data *modelProduct.ProductCreate) error {
-	if data.Name == "" {
-		return modelProduct.ErrNameIsBlank
-	}
-	if data.Price == 0 {
-		return modelProduct.ErrPriceIsBlank
-	}
-	if data.CategoryId == 0 {
-		return modelProduct.ErrCategoryIsBlank
+	if err := data.Validate(); err != nil {
+		return err
 	}
 
 	if err := biz.store.CreateProduct(ctx, data); err != nil {

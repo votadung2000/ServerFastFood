@@ -2,6 +2,7 @@ package modelProduct
 
 import (
 	"errors"
+	"strings"
 	"time"
 )
 
@@ -44,6 +45,22 @@ type ProductCreate struct {
 
 func (ProductCreate) TableName() string {
 	return Product{}.TableName()
+}
+
+func (p *ProductCreate) Validate() error {
+	p.Name = strings.TrimSpace(p.Name)
+
+	if p.Name == "" {
+		return ErrNameIsBlank
+	}
+	if p.Price == 0 {
+		return ErrPriceIsBlank
+	}
+	if p.CategoryId == 0 {
+		return ErrCategoryIsBlank
+	}
+
+	return nil
 }
 
 type ProductUpdate struct {
