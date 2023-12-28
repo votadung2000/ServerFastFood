@@ -35,11 +35,11 @@ func (s *sqlStorage) ListProduct(
 		}
 	}
 
-	if err := db.Table(modelProduct.Product{}.TableName()).Count(&paging.Total).Error; err != nil {
+	if err := db.Select("id").Table(modelProduct.Product{}.TableName()).Count(&paging.Total).Error; err != nil {
 		return nil, err
 	}
 
-	if err := db.Order("id desc").
+	if err := db.Select("*").Order("id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {
