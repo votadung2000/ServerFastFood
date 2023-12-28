@@ -29,9 +29,9 @@ func (Category) TableName() string {
 }
 
 type CategoryUpdate struct {
-	Name   string `json:"name" gorm:"column:name"`
-	Status int    `json:"status" gorm:"column:status"`
-	Image  string `json:"image" gorm:"column:image"`
+	Name   *string `json:"name" gorm:"column:name"`
+	Status *int    `json:"status" gorm:"column:status"`
+	Image  *string `json:"image" gorm:"column:image"`
 }
 
 func (CategoryUpdate) TableName() string {
