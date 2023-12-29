@@ -4,6 +4,7 @@ import (
 	favorite "fastFood/controller/favorite"
 	user "fastFood/controller/user"
 	"fastFood/database"
+	"fastFood/middleware"
 	ginCategory "fastFood/modules/category/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
@@ -17,6 +18,7 @@ func Router() {
 
 	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	router.Use(middleware.Recover())
 	// router.Use(middleware.Authentication())
 
 	v1 := router.Group("/v1")
