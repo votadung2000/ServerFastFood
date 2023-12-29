@@ -24,7 +24,7 @@ func CreateProductHandler(db *gorm.DB) gin.HandlerFunc {
 		business := bizProduct.CreateProductBiz(store)
 
 		if err := business.CreateProduct(ctx.Request.Context(), &data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

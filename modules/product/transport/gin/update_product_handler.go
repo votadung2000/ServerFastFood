@@ -33,7 +33,7 @@ func UpdateProductHandler(db *gorm.DB) gin.HandlerFunc {
 		business := bizProduct.UpdateProductBiz(store)
 
 		if err := business.UpdateProduct(ctx.Request.Context(), id, &data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

@@ -2,6 +2,7 @@ package storageProduct
 
 import (
 	"context"
+	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
 )
 
@@ -14,7 +15,7 @@ func (s *sqlStorage) DeleteProduct(
 		Updates(map[string]interface{}{
 			"status": modelProduct.STATUS_DELETED,
 		}).Error; err != nil {
-		return err
+		return common.ErrDB(err)
 	}
 
 	return nil
