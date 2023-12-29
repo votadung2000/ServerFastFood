@@ -35,7 +35,7 @@ func ListProductHandler(db *gorm.DB) gin.HandlerFunc {
 		)
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

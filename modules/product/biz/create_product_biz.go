@@ -2,6 +2,7 @@ package bizProduct
 
 import (
 	"context"
+	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
 )
 
@@ -23,7 +24,7 @@ func (biz *createProductBiz) CreateProduct(ctx context.Context, data *modelProdu
 	}
 
 	if err := biz.store.CreateProduct(ctx, data); err != nil {
-		return err
+		return common.ErrCannotCreateEntity(modelProduct.EntityName, err)
 	}
 
 	return nil

@@ -2,6 +2,7 @@ package bizProduct
 
 import (
 	"context"
+	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
 )
 
@@ -22,7 +23,7 @@ func (biz *deleteProductBiz) DeleteProduct(ctx context.Context, id int) error {
 	data, err := biz.store.FindProduct(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
-		return err
+		return common.ErrCannotGetEntity(modelProduct.EntityName, err)
 	}
 
 	if data.Status != 0 && data.Status == modelProduct.STATUS_DELETED {
@@ -30,7 +31,7 @@ func (biz *deleteProductBiz) DeleteProduct(ctx context.Context, id int) error {
 	}
 
 	if err := biz.store.DeleteProduct(ctx, map[string]interface{}{"id": id}); err != nil {
-		return err
+		return common.ErrCannotDeleteEntity(modelProduct.EntityName, err)
 	}
 
 	return nil

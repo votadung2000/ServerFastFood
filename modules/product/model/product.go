@@ -12,6 +12,10 @@ const (
 	STATUS_DELETED = -2
 )
 
+const (
+	EntityName = "Product"
+)
+
 var (
 	ErrBlocked         = errors.New("the product has been blocked")
 	ErrDeleted         = errors.New("the product has been deleted")

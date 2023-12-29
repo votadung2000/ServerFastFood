@@ -24,7 +24,7 @@ func DeleteProductHandler(db *gorm.DB) gin.HandlerFunc {
 		business := bizProduct.DeleteProductBiz(store)
 
 		if err := business.DeleteProduct(ctx.Request.Context(), id); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 
