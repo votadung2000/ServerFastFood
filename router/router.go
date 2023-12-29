@@ -8,6 +8,7 @@ import (
 	ginCategory "fastFood/modules/category/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
+	"fastFood/modules/upload"
 
 	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
@@ -20,8 +21,12 @@ func Router() {
 	router := gin.Default()
 	router.Use(middleware.Recover())
 	// router.Use(middleware.Authentication())
+	router.Static("/static", "./static")
 
 	v1 := router.Group("/v1")
+
+	v1.PUT("/upload", upload.Upload(db))
+
 	{
 		v1.POST("/login", user.HandleLogin(db))
 		v1.POST("/register", user.HandleRegister(db))
