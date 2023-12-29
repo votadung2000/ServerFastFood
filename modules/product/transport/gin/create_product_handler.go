@@ -16,7 +16,7 @@ func CreateProductHandler(db *gorm.DB) gin.HandlerFunc {
 		var data modelProduct.ProductCreate
 
 		if err := ctx.ShouldBind(&data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 

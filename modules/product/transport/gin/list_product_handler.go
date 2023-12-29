@@ -19,7 +19,7 @@ func ListProductHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		if err := ctx.ShouldBind(&queryString); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
