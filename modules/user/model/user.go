@@ -16,12 +16,14 @@ const (
 )
 
 var (
-	ErrDeleted            = "the user has been deleted"
-	ErrUserNameIsBlank    = "User name cannot be blank"
-	ErrPasswordIsBlank    = "Password cannot be blank"
-	ErrNameIsBlank        = "Last name cannot be blank"
-	ErrPhoneNumberIsBlank = "Phone number cannot be blank"
-	ErrEmailIsBlank       = "Email cannot be blank"
+	ErrDeleted                  = "the user has been deleted"
+	ErrUserNameIsBlank          = "User name cannot be blank"
+	ErrPasswordIsBlank          = "Password cannot be blank"
+	ErrNameIsBlank              = "Last name cannot be blank"
+	ErrPhoneNumberIsBlank       = "Phone number cannot be blank"
+	ErrInvalidPhoneNumberFormat = "Invalid phone number format"
+	ErrEmailIsBlank             = "Email cannot be blank"
+	ErrInvalidEmailFormat       = "Invalid email format"
 )
 
 type User struct {
@@ -46,7 +48,7 @@ type UserCreate struct {
 	common.SQLModel
 	Name        string `json:"name" gorm:"column:name;"`
 	UserName    string `json:"user_name" gorm:"column:user_name;"`
-	Password    string `json:"-" gorm:"column:password;"`
+	Password    string `json:"password" gorm:"column:password;"`
 	Salt        string `json:"-" gorm:"column:salt"`
 	Status      int    `json:"status" gorm:"column:status;"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
@@ -83,8 +85,17 @@ func (i *UserCreate) Validate() error {
 		return ErrValidateRequest(ErrPhoneNumberIsBlank, "ERR_PHONE_NUMBER_IS_BLANK")
 	}
 
+	if len(i.PhoneNumber) != 10 {
+		return ErrValidateRequest(ErrInvalidPhoneNumberFormat, "ERR_INVALID_PHONE_NUMBER_FORMAT")
+	}
+
 	if i.Email == "" {
 		return ErrValidateRequest(ErrEmailIsBlank, "ERR_EMAIL_IS_BLANK")
+	}
+
+	partsEmail := strings.Split(i.Email, "@")
+	if len(partsEmail) != 2 {
+		return ErrValidateRequest(ErrInvalidEmailFormat, "ERR_INVALID_EMAIL_FORMAT")
 	}
 
 	return nil
