@@ -44,7 +44,7 @@ func Router() {
 
 		category := v1.Group("/category", middlewareAuth)
 		{
-			category.POST("", ginCategory.CreateCategoryHandler(db))
+			category.POST("", ginCategory.CreateCategoryHdl(db))
 			category.GET("", ginCategory.ListCategoryHandler(db))
 			category.GET("/:id", ginCategory.FindCategoryHandler(db))
 			category.PATCH("/:id", ginCategory.UpdateCategoryHandler(db))
