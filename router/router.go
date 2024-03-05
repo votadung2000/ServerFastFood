@@ -12,7 +12,6 @@ import (
 	ginUser "fastFood/modules/user/transport/gin"
 	"os"
 
-	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,24 +42,29 @@ func Router() {
 			v1.GET("/profile", middlewareAuth, ginUser.ProfileUserHandler(db))
 		}
 
+		category := v1.Group("/category", middlewareAuth)
 		{
-			v1.POST("/category", ginCategory.CreateCategoryHandler(db))
-			v1.GET("/category", ginCategory.ListCategoryHandler(db))
-			v1.GET("/category/:id", ginCategory.FindCategoryHandler(db))
-			v1.PATCH("/category/:id", ginCategory.UpdateCategoryHandler(db))
-			v1.DELETE("/category/:id", ginCategory.DeleteCategoryHandler(db))
+			category.POST("", ginCategory.CreateCategoryHandler(db))
+			category.GET("", ginCategory.ListCategoryHandler(db))
+			category.GET("/:id", ginCategory.FindCategoryHandler(db))
+			category.PATCH("/:id", ginCategory.UpdateCategoryHandler(db))
+			category.DELETE("/:id", ginCategory.DeleteCategoryHandler(db))
 		}
+
+		product := v1.Group("/product", middlewareAuth)
 		{
-			v1.POST("/product", ginProduct.CreateProductHandler(db))
-			v1.GET("/product", ginProduct.ListProductHandler(db))
-			v1.GET("/product/:id", ginProduct.FindProductHandler(db))
-			v1.PATCH("/product/:id", ginProduct.UpdateProductHandler(db))
-			v1.DELETE("/product/:id", ginProduct.DeleteProductHandler(db))
+			product.POST("", ginProduct.CreateProductHandler(db))
+			product.GET("", ginProduct.ListProductHandler(db))
+			product.GET("/:id", ginProduct.FindProductHandler(db))
+			product.PATCH("/:id", ginProduct.UpdateProductHandler(db))
+			product.DELETE("/:id", ginProduct.DeleteProductHandler(db))
 		}
+
+		favorite := v1.Group("/favorite", middlewareAuth)
 		{
-			v1.POST("/favorite", ginFavorite.CreateFavoriteHandler(db))
+			favorite.POST("", ginFavorite.CreateFavoriteHandler(db))
 			// v1.GET("/favorite", favorite.GetAllFavorites(db))
-			v1.DELETE("/favorite/:id", ginFavorite.DeleteFavoriteHandler(db))
+			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHandler(db))
 		}
 	}
 
