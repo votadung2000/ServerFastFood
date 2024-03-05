@@ -4,13 +4,13 @@ import (
 	"fastFood/common"
 	jwtProvider "fastFood/components/tokenProvider/jwt"
 	favorite "fastFood/controller/favorite"
-	user "fastFood/controller/user"
 	"fastFood/database"
 	"fastFood/middleware"
 	ginCategory "fastFood/modules/category/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
 	"fastFood/modules/upload"
+	storageUser "fastFood/modules/user/storage"
 	ginUser "fastFood/modules/user/transport/gin"
 	"os"
 
@@ -25,8 +25,8 @@ func Router() {
 
 	secret := os.Getenv("SECRET_JWT")
 	tokenProvider := jwtProvider.NewJwtProvider(common.JWT, secret)
-	// authStore := storageUser.NewSQLStorage(db)
-	// middlewareAuth := middleware.RequireAuth(authStore, tokenProvider)
+	authStore := storageUser.NewSQLStorage(db)
+	middlewareAuth := middleware.RequireAuth(authStore, tokenProvider)
 
 	router := gin.Default()
 	router.Use(middleware.Recover())
@@ -40,9 +40,7 @@ func Router() {
 	{
 		v1.POST("/login", ginUser.LoginHdl(db, tokenProvider))
 		v1.POST("/register", ginUser.RegisterHdl(db))
-		v1.GET("/user/:id", user.GetDetailUserItem(db))
-		v1.PUT("/user/:id", user.UpdatesUserItem(db))
-		v1.DELETE("/user/:id", user.DeleteUserItem(db))
+		v1.GET("/profile", middlewareAuth, ginUser.ProfileUserHandler(db))
 	}
 
 	{
