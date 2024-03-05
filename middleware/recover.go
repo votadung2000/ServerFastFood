@@ -14,14 +14,14 @@ func Recover() gin.HandlerFunc {
 
 				if appErr, ok := err.(*common.AppError); ok {
 					ctx.AbortWithStatusJSON(appErr.StatusCode, appErr)
-					// panic(err)
-					return
+					panic(err)
+					// return
 				}
 
 				appErr := common.ErrInternal(err.(error))
 				ctx.AbortWithStatusJSON(appErr.StatusCode, appErr)
 				panic(err)
-				return
+				// return
 			}
 		}()
 
