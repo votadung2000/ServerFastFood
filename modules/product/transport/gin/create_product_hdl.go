@@ -3,27 +3,27 @@ package ginProduct
 import (
 	"fastFood/common"
 	bizProduct "fastFood/modules/product/biz"
+	modelProduct "fastFood/modules/product/model"
 	storageProduct "fastFood/modules/product/storage"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func DeleteProductHandler(db *gorm.DB) gin.HandlerFunc {
+func CreateProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		id, err := strconv.Atoi(ctx.Param("id"))
+		var data modelProduct.ProductCreate
 
-		if err != nil {
+		if err := ctx.ShouldBind(&data); err != nil {
 			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		store := storageProduct.NewSQLStorage(db)
-		business := bizProduct.DeleteProductBiz(store)
+		business := bizProduct.NewCreateProductBiz(store)
 
-		if err := business.DeleteProduct(ctx.Request.Context(), id); err != nil {
+		if err := business.CreateProduct(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}

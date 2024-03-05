@@ -14,7 +14,7 @@ type findProductBiz struct {
 	store FindProductStorage
 }
 
-func FindProductBiz(store FindProductStorage) *findProductBiz {
+func NewFindProductBiz(store FindProductStorage) *findProductBiz {
 	return &findProductBiz{store: store}
 }
 

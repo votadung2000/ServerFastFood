@@ -15,7 +15,7 @@ type deleteProductBiz struct {
 	store DeleteProductStorage
 }
 
-func DeleteProductBiz(store DeleteProductStorage) *deleteProductBiz {
+func NewDeleteProductBiz(store DeleteProductStorage) *deleteProductBiz {
 	return &deleteProductBiz{store: store}
 }
 

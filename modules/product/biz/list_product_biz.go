@@ -19,7 +19,7 @@ type listProductBiz struct {
 	store ListProductStorage
 }
 
-func ListProductBiz(store ListProductStorage) *listProductBiz {
+func NewListProductBiz(store ListProductStorage) *listProductBiz {
 	return &listProductBiz{store: store}
 }
 

@@ -14,7 +14,7 @@ type createProductBiz struct {
 	store CreateProductStorage
 }
 
-func CreateProductBiz(store CreateProductStorage) *createProductBiz {
+func NewCreateProductBiz(store CreateProductStorage) *createProductBiz {
 	return &createProductBiz{store: store}
 }
 

@@ -15,7 +15,7 @@ type updateProductBiz struct {
 	store UpdateProductStorage
 }
 
-func UpdateProductBiz(store UpdateProductStorage) *updateProductBiz {
+func NewUpdateProductBiz(store UpdateProductStorage) *updateProductBiz {
 	return &updateProductBiz{store: store}
 }
 

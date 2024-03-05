@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ListProductHandler(db *gorm.DB) gin.HandlerFunc {
+func ListProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var queryString struct {
 			common.Paging
@@ -26,7 +26,7 @@ func ListProductHandler(db *gorm.DB) gin.HandlerFunc {
 		queryString.Process()
 
 		store := storageProduct.NewSQLStorage(db)
-		business := bizProduct.ListProductBiz(store)
+		business := bizProduct.NewListProductBiz(store)
 
 		data, err := business.ListProduct(
 			ctx.Request.Context(),
