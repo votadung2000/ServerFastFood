@@ -16,7 +16,7 @@ func FindProductHandler(db *gorm.DB) gin.HandlerFunc {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
@@ -26,7 +26,7 @@ func FindProductHandler(db *gorm.DB) gin.HandlerFunc {
 		data, err := business.FindProduct(ctx.Request.Context(), id)
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

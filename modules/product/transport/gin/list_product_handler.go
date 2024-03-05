@@ -13,36 +13,32 @@ import (
 
 func ListProductHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var paging common.Paging
+		var queryString struct {
+			common.Paging
+			modelProduct.Filter
+		}
 
-		if err := ctx.ShouldBind(&paging); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+		if err := ctx.ShouldBind(&queryString); err != nil {
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
-		paging.Process()
-
-		var filter modelProduct.Filter
-
-		if err := ctx.ShouldBind(&filter); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
-			return
-		}
+		queryString.Process()
 
 		store := storageProduct.NewSQLStorage(db)
 		business := bizProduct.ListProductBiz(store)
 
 		data, err := business.ListProduct(
 			ctx.Request.Context(),
-			&filter,
-			&paging,
+			&queryString.Filter,
+			&queryString.Paging,
 		)
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 
-		ctx.JSON(http.StatusOK, common.SuccessResponse(data, filter, paging))
+		ctx.JSON(http.StatusOK, common.SuccessResponse(data, queryString.Filter, queryString.Paging))
 	}
 }

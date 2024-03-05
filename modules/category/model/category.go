@@ -14,7 +14,7 @@ const (
 var (
 	ErrBlocked     = errors.New("the category has been blocked")
 	ErrDeleted     = errors.New("the category has been deleted")
-	ErrNameIsBlank = errors.New("name category cannot be blank")
+	ErrNameIsBlank = errors.New("the name category cannot be blank")
 )
 
 type Category struct {
@@ -29,9 +29,9 @@ func (Category) TableName() string {
 }
 
 type CategoryUpdate struct {
-	Name   string `json:"name" gorm:"column:name"`
-	Status int    `json:"status" gorm:"column:status"`
-	Image  string `json:"image" gorm:"column:image"`
+	Name   *string `json:"name" gorm:"column:name"`
+	Status *int    `json:"status" gorm:"column:status"`
+	Image  *string `json:"image" gorm:"column:image"`
 }
 
 func (CategoryUpdate) TableName() string {
