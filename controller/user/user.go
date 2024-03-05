@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"fastFood/auth"
+	"fastFood/common"
 	"fastFood/components"
 	"fastFood/models"
 
@@ -27,8 +28,8 @@ func HandleRegister(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		userItem.UserName = components.Sanitize(userItem.UserName)
-		userItem.PassWord = components.Sanitize(userItem.PassWord)
+		userItem.UserName = common.Sanitize(userItem.UserName)
+		userItem.PassWord = common.Sanitize(userItem.PassWord)
 
 		var infoUserItem []models.Users
 
@@ -70,8 +71,8 @@ func HandleLogin(data *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		userItem.UserName = components.Sanitize(userItem.UserName)
-		userItem.PassWord = components.Sanitize(userItem.PassWord)
+		userItem.UserName = common.Sanitize(userItem.UserName)
+		userItem.PassWord = common.Sanitize(userItem.PassWord)
 
 		var infoUserItem models.Users
 
