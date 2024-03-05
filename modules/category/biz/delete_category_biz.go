@@ -14,7 +14,7 @@ type deleteCategoryBiz struct {
 	store DeleteCategoryStorage
 }
 
-func DeleteCategoryBiz(store DeleteCategoryStorage) *deleteCategoryBiz {
+func NewDeleteCategoryBiz(store DeleteCategoryStorage) *deleteCategoryBiz {
 	return &deleteCategoryBiz{store: store}
 }
 

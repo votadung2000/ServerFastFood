@@ -11,25 +11,23 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindCategoryHandler(db *gorm.DB) gin.HandlerFunc {
+func DeleteCategoryHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		store := storageCategory.NewSqlStorage(db)
-		business := bizCategory.FindCategoryBiz(store)
+		business := bizCategory.NewDeleteCategoryBiz(store)
 
-		data, err := business.FindCategory(ctx.Request.Context(), id)
-
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+		if err := business.DeleteCategory(ctx.Request.Context(), id); err != nil {
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 
-		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }

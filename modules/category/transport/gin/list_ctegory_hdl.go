@@ -11,12 +11,12 @@ import (
 	"gorm.io/gorm"
 )
 
-func ListCategoryHandler(db *gorm.DB) gin.HandlerFunc {
+func ListCategoryHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var paging common.Paging
 
 		if err := ctx.ShouldBind(&paging); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
@@ -25,17 +25,17 @@ func ListCategoryHandler(db *gorm.DB) gin.HandlerFunc {
 		var filter modelCategory.Filter
 
 		if err := ctx.ShouldBind(&filter); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		store := storageCategory.NewSqlStorage(db)
-		business := bizCategory.ListCategoryBiz(store)
+		business := bizCategory.NewListCategoryBiz(store)
 
 		data, err := business.ListCategory(ctx.Request.Context(), &filter, &paging)
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

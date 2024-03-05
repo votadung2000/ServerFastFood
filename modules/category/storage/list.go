@@ -4,6 +4,8 @@ import (
 	"context"
 	"fastFood/common"
 	modelCategory "fastFood/modules/category/model"
+
+	"gorm.io/gorm"
 )
 
 func (s *sqlStorage) ListCategory(
@@ -26,14 +28,18 @@ func (s *sqlStorage) ListCategory(
 	}
 
 	if err := db.Table(modelCategory.Category{}.TableName()).Count(&paging.Total).Error; err != nil {
-		return nil, err
+		return nil, common.ErrDB(err)
 	}
 
 	if err := db.Order("id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {
-		return nil, err
+		if err == gorm.ErrRecordNotFound {
+			return nil, common.RecordNoFound
+		}
+
+		return nil, common.ErrDB(err)
 	}
 
 	return result, nil
