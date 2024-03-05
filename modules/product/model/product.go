@@ -1,7 +1,6 @@
 package modelProduct
 
 import (
-	"errors"
 	"fastFood/common"
 	"strings"
 )
@@ -10,6 +9,9 @@ const (
 	STATUS_ACTION  = 1
 	STATUS_BLOCK   = -1
 	STATUS_DELETED = -2
+
+	FEATURED_NORMAL      = 1
+	FEATURED_OUTSTANDING = 2
 )
 
 const (
@@ -17,11 +19,11 @@ const (
 )
 
 var (
-	ErrBlocked         = errors.New("the product has been blocked")
-	ErrDeleted         = errors.New("the product has been deleted")
-	ErrNameIsBlank     = errors.New("name product cannot be blank")
-	ErrPriceIsBlank    = errors.New("price product cannot be blank")
-	ErrCategoryIsBlank = errors.New("category product cannot be blank")
+	ErrBlocked         = "the product has been blocked"
+	ErrDeleted         = "the product has been deleted"
+	ErrNameIsBlank     = "name product cannot be blank"
+	ErrPriceIsBlank    = "price product cannot be blank"
+	ErrCategoryIsBlank = "category product cannot be blank"
 )
 
 type Product struct {
@@ -44,10 +46,14 @@ func (Product) TableName() string {
 }
 
 type ProductCreate struct {
-	Name       string `json:"name" gorm:"column:name;"`
-	Price      int    `json:"price" gorm:"column:price;"`
-	CategoryId int    `json:"category_id" gorm:"column:category_id;"`
-	ImageId    int    `json:"image_id" gorm:"column:image_id;"`
+	Name        string  `json:"name" gorm:"column:name;"`
+	ImageId     int     `json:"image_id" gorm:"column:image_id;"`
+	Taste       string  `json:"taste" gorm:"column:taste;"`
+	Price       int     `json:"price" gorm:"column:price;"`
+	CategoryId  int     `json:"category_id" gorm:"column:category_id;"`
+	Discount    float32 `json:"discount" gorm:"column:discount;"`
+	Description string  `json:"description" gorm:"column:description;"`
+	Quantity    int     `json:"quantity" gorm:"column:quantity;"`
 }
 
 func (ProductCreate) TableName() string {
@@ -58,13 +64,13 @@ func (p *ProductCreate) Validate() error {
 	p.Name = strings.TrimSpace(p.Name)
 
 	if p.Name == "" {
-		return ErrNameIsBlank
+		return ErrValidateRequest(ErrNameIsBlank, "ERR_NAME_IS_BLANK")
 	}
 	if p.Price == 0 {
-		return ErrPriceIsBlank
+		return ErrValidateRequest(ErrPriceIsBlank, "ERR_PRICE_IS_BLANK")
 	}
 	if p.CategoryId == 0 {
-		return ErrCategoryIsBlank
+		return ErrValidateRequest(ErrCategoryIsBlank, "ERR_CATEGORY_IS_BLANK")
 	}
 
 	return nil

@@ -27,7 +27,7 @@ func (biz *deleteProductBiz) DeleteProduct(ctx context.Context, id int) error {
 	}
 
 	if data.Status != 0 && data.Status == modelProduct.STATUS_DELETED {
-		return modelProduct.ErrDeleted
+		return modelProduct.ErrProductHasBeenDeleted()
 	}
 
 	if err := biz.store.DeleteProduct(ctx, map[string]interface{}{"id": id}); err != nil {
