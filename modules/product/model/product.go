@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fastFood/common"
 	"strings"
-	"time"
 )
 
 const (
@@ -26,7 +25,7 @@ var (
 )
 
 type Product struct {
-	Id         int           `json:"id" gorm:"column:id;"`
+	common.SQLModel
 	Name       string        `json:"name" gorm:"column:name;"`
 	Status     int           `json:"status" gorm:"column:status;"`
 	Image      *common.Image `json:"image" gorm:"column:image;"`
@@ -34,8 +33,6 @@ type Product struct {
 	CategoryId int           `json:"category_id" gorm:"column:category_id;"`
 	Price      int           `json:"price" gorm:"column:price;"`
 	Discount   int           `json:"discount" gorm:"column:discount;"`
-	CreatedAt  *time.Time    `json:"created_at" gorm:"column:created_at;"`
-	UpdatedAt  *time.Time    `json:"updated_at" gorm:"column:updated_at;"`
 }
 
 func (Product) TableName() string {
