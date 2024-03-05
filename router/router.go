@@ -45,10 +45,10 @@ func Router() {
 		category := v1.Group("/category", middlewareAuth)
 		{
 			category.POST("", ginCategory.CreateCategoryHdl(db))
-			category.GET("", ginCategory.ListCategoryHandler(db))
-			category.GET("/:id", ginCategory.FindCategoryHandler(db))
-			category.PATCH("/:id", ginCategory.UpdateCategoryHandler(db))
-			category.DELETE("/:id", ginCategory.DeleteCategoryHandler(db))
+			category.GET("", ginCategory.ListCategoryHdl(db))
+			category.GET("/:id", ginCategory.FindCategoryHdl(db))
+			category.PATCH("/:id", ginCategory.UpdateCategoryHdl(db))
+			category.DELETE("/:id", ginCategory.DeleteCategoryHdl(db))
 		}
 
 		product := v1.Group("/product", middlewareAuth)

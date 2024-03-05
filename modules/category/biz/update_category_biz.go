@@ -21,7 +21,7 @@ type updateCategoryBiz struct {
 	store UpdateCategoryStorage
 }
 
-func UpdateCategoryBiz(store UpdateCategoryStorage) *updateCategoryBiz {
+func NewUpdateCategoryBiz(store UpdateCategoryStorage) *updateCategoryBiz {
 	return &updateCategoryBiz{store: store}
 }
 
@@ -36,8 +36,8 @@ func (biz *updateCategoryBiz) UpdateCategory(
 		return err
 	}
 
-	if data.Status != 0 && data.Status == modelCategory.STATUS_BLOCK {
-		return modelCategory.ErrCategoryHasBeenBlocked()
+	if data.Status != 0 && data.Status == modelCategory.STATUS_DELETED {
+		return modelCategory.ErrCategoryHasBeenDeleted()
 	}
 
 	if err := biz.store.UpdateCategory(ctx, map[string]interface{}{"id": id}, dataUpdate); err != nil {

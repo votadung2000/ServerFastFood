@@ -12,27 +12,27 @@ import (
 	"gorm.io/gorm"
 )
 
-func UpdateCategoryHandler(db *gorm.DB) gin.HandlerFunc {
+func UpdateCategoryHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		var dataUpdate modelCategory.CategoryUpdate
 
 		if err := ctx.ShouldBind(&dataUpdate); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		store := storageCategory.NewSqlStorage(db)
-		business := bizCategory.UpdateCategoryBiz(store)
+		business := bizCategory.NewUpdateCategoryBiz(store)
 
 		if err := business.UpdateCategory(ctx.Request.Context(), id, &dataUpdate); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 
