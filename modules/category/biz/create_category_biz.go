@@ -2,7 +2,7 @@ package bizCategory
 
 import (
 	"context"
-	"fastFood/components"
+	"fastFood/common"
 	modelCategory "fastFood/modules/category/model"
 )
 
@@ -19,7 +19,7 @@ func CreateCategoryBiz(store CreateCategoryStorage) *createCategoryBiz {
 }
 
 func (biz *createCategoryBiz) CreateCategory(ctx context.Context, data *modelCategory.CategoryCreate) error {
-	data.Name = components.Sanitize(data.Name)
+	data.Name = common.Sanitize(data.Name)
 
 	if data.Name == "" {
 		return modelCategory.ErrNameIsBlank

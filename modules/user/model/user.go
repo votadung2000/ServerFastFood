@@ -99,3 +99,12 @@ func (i *UserCreate) Validate() error {
 
 	return nil
 }
+
+type Login struct {
+	UserName string `json:"user_name" form:"user_name" gorm:"column:user_name"`
+	Password string `json:"password" form:"password" gorm:"column:password"`
+}
+
+func (Login) TableName() string {
+	return User{}.TableName()
+}

@@ -1,6 +1,8 @@
 package router
 
 import (
+	"fastFood/common"
+	jwtProvider "fastFood/components/tokenProvider/jwt"
 	favorite "fastFood/controller/favorite"
 	user "fastFood/controller/user"
 	"fastFood/database"
@@ -10,6 +12,7 @@ import (
 	ginProduct "fastFood/modules/product/transport/gin"
 	"fastFood/modules/upload"
 	ginUser "fastFood/modules/user/transport/gin"
+	"os"
 
 	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
@@ -19,6 +22,12 @@ func Router() {
 	db := database.Connections()
 
 	gin.SetMode(gin.ReleaseMode)
+
+	secret := os.Getenv("SECRET_JWT")
+	tokenProvider := jwtProvider.NewJwtProvider(common.JWT, secret)
+	// authStore := storageUser.NewSQLStorage(db)
+	// middlewareAuth := middleware.RequireAuth(authStore, tokenProvider)
+
 	router := gin.Default()
 	router.Use(middleware.Recover())
 	// router.Use(middleware.Authentication())
@@ -29,7 +38,7 @@ func Router() {
 	v1.PUT("/upload", upload.Upload(db))
 
 	{
-		v1.POST("/login", user.HandleLogin(db))
+		v1.POST("/login", ginUser.LoginHdl(db, tokenProvider))
 		v1.POST("/register", ginUser.RegisterHdl(db))
 		v1.GET("/user/:id", user.GetDetailUserItem(db))
 		v1.PUT("/user/:id", user.UpdatesUserItem(db))
