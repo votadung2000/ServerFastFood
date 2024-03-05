@@ -6,7 +6,6 @@ import (
 	"fastFood/common"
 	"fastFood/components/tokenProvider"
 	modelUser "fastFood/modules/user/model"
-	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -43,22 +42,19 @@ func RequireAuth(authStorage AuthStorage, tokenProvider tokenProvider.Provider) 
 		token, err := extractTokenFromHeaderString(ctx.GetHeader("Authorization"))
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
-			return
+			panic(err)
 		}
 
 		payload, err := tokenProvider.Validate(token)
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
-			return
+			panic(err)
 		}
 
 		user, err := authStorage.FindUser(ctx.Request.Context(), map[string]interface{}{"id": payload.UserId()})
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, err)
-			return
+			panic(err)
 		}
 
 		if user.Status == 0 {
