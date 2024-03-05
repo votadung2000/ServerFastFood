@@ -26,13 +26,17 @@ var (
 
 type Product struct {
 	common.SQLModel
-	Name       string        `json:"name" gorm:"column:name;"`
-	Status     int           `json:"status" gorm:"column:status;"`
-	Image      *common.Image `json:"image" gorm:"column:image;"`
-	Taste      string        `json:"taste" gorm:"column:taste;"`
-	CategoryId int           `json:"category_id" gorm:"column:category_id;"`
-	Price      int           `json:"price" gorm:"column:price;"`
-	Discount   int           `json:"discount" gorm:"column:discount;"`
+	Name        string  `json:"name" gorm:"column:name;"`
+	ImageId     int     `json:"image_id" gorm:"column:image_id;"`
+	Taste       string  `json:"taste" gorm:"column:taste;"`
+	Price       float32 `json:"price" gorm:"column:price;"`
+	CategoryId  int     `json:"category_id" gorm:"column:category_id;"`
+	Discount    float32 `json:"discount" gorm:"column:discount;"`
+	Status      int     `json:"status" gorm:"column:status;"`
+	Description string  `json:"description" gorm:"column:description;"`
+	Quantity    int     `json:"quantity" gorm:"column:quantity;"`
+	Sold        int     `json:"sold" gorm:"column:sold;"`
+	Featured    int     `json:"featured" gorm:"column:featured;"`
 }
 
 func (Product) TableName() string {
@@ -40,10 +44,10 @@ func (Product) TableName() string {
 }
 
 type ProductCreate struct {
-	Name       string        `json:"name" gorm:"column:name;"`
-	Price      int           `json:"price" gorm:"column:price;"`
-	CategoryId int           `json:"category_id" gorm:"column:category_id;"`
-	Image      *common.Image `json:"image" gorm:"column:image;"`
+	Name       string `json:"name" gorm:"column:name;"`
+	Price      int    `json:"price" gorm:"column:price;"`
+	CategoryId int    `json:"category_id" gorm:"column:category_id;"`
+	ImageId    int    `json:"image_id" gorm:"column:image_id;"`
 }
 
 func (ProductCreate) TableName() string {

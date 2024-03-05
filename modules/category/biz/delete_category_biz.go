@@ -25,7 +25,7 @@ func (biz *deleteCategoryBiz) DeleteCategory(ctx context.Context, id int) error 
 	}
 
 	if data.Status != 0 && data.Status == modelCategory.STATUS_DELETED {
-		return modelCategory.ErrDeleted
+		return modelCategory.ErrCategoryHasBeenDeleted()
 	}
 
 	if err := biz.store.DeleteCategory(ctx, map[string]interface{}{"id": id}); err != nil {

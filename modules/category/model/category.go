@@ -1,8 +1,8 @@
 package modelCategory
 
 import (
-	"errors"
 	"fastFood/common"
+	"strings"
 )
 
 const (
@@ -12,16 +12,15 @@ const (
 )
 
 var (
-	ErrBlocked     = errors.New("the category has been blocked")
-	ErrDeleted     = errors.New("the category has been deleted")
-	ErrNameIsBlank = errors.New("the name category cannot be blank")
+	ErrBlocked     = "the category has been blocked"
+	ErrNameIsBlank = "the name category cannot be blank"
 )
 
 type Category struct {
 	common.SQLModel
-	Name   string `json:"name" gorm:"column:name;"`
-	Status int    `json:"status" gorm:"column:status;"`
-	Image  string `json:"image" gorm:"column:image;"`
+	Name    string `json:"name" gorm:"column:name;"`
+	Status  int    `json:"status" gorm:"column:status;"`
+	ImageId int    `json:"image_id" gorm:"column:image_id;"`
 }
 
 func (Category) TableName() string {
@@ -29,9 +28,9 @@ func (Category) TableName() string {
 }
 
 type CategoryUpdate struct {
-	Name   *string `json:"name" gorm:"column:name"`
-	Status *int    `json:"status" gorm:"column:status"`
-	Image  *string `json:"image" gorm:"column:image"`
+	Name    *string `json:"name" gorm:"column:name"`
+	Status  *int    `json:"status" gorm:"column:status"`
+	ImageId *int    `json:"image_id" gorm:"column:image_id;"`
 }
 
 func (CategoryUpdate) TableName() string {
@@ -39,9 +38,20 @@ func (CategoryUpdate) TableName() string {
 }
 
 type CategoryCreate struct {
-	Name string `json:"name" gorm:"column:name"`
+	Name    string `json:"name" gorm:"column:name"`
+	ImageId int    `json:"image_id" gorm:"column:image_id;"`
 }
 
 func (CategoryCreate) TableName() string {
 	return Category{}.TableName()
+}
+
+func (i *CategoryCreate) Validate() error {
+	i.Name = strings.TrimSpace(i.Name)
+
+	if i.Name == "" {
+		return ErrValidateRequest(ErrNameIsBlank, "ERR_NAME_IS_BLANK")
+	}
+
+	return nil
 }

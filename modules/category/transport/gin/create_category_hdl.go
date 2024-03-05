@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateCategoryHandler(db *gorm.DB) gin.HandlerFunc {
+func CreateCategoryHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var data modelCategory.CategoryCreate
 
@@ -21,7 +21,7 @@ func CreateCategoryHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		store := storageCategory.NewSqlStorage(db)
-		business := bizCategory.CreateCategoryBiz(store)
+		business := bizCategory.NewCreateCategoryBiz(store)
 
 		if err := business.CreateCategory(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})

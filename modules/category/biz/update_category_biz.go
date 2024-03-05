@@ -37,7 +37,7 @@ func (biz *updateCategoryBiz) UpdateCategory(
 	}
 
 	if data.Status != 0 && data.Status == modelCategory.STATUS_BLOCK {
-		return modelCategory.ErrBlocked
+		return modelCategory.ErrCategoryHasBeenBlocked()
 	}
 
 	if err := biz.store.UpdateCategory(ctx, map[string]interface{}{"id": id}, dataUpdate); err != nil {
