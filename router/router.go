@@ -9,6 +9,7 @@ import (
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
 	"fastFood/modules/upload"
+	ginUser "fastFood/modules/user/transport/gin"
 
 	// "fastFood/middleware"
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ import (
 func Router() {
 	db := database.Connections()
 
-	// gin.SetMode(gin.ReleaseMode)
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(middleware.Recover())
 	// router.Use(middleware.Authentication())
@@ -29,7 +30,7 @@ func Router() {
 
 	{
 		v1.POST("/login", user.HandleLogin(db))
-		v1.POST("/register", user.HandleRegister(db))
+		v1.POST("/register", ginUser.RegisterHdl(db))
 		v1.GET("/user/:id", user.GetDetailUserItem(db))
 		v1.PUT("/user/:id", user.UpdatesUserItem(db))
 		v1.DELETE("/user/:id", user.DeleteUserItem(db))
@@ -55,5 +56,5 @@ func Router() {
 		v1.DELETE("/favorite/:id", ginFavorite.DeleteFavoriteHandler(db))
 	}
 
-	router.Run()
+	router.Run(":3000")
 }
