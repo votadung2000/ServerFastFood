@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func UpdateProductHandler(db *gorm.DB) gin.HandlerFunc {
+func UpdateProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
 		id, err := strconv.Atoi(ctx.Param("id"))
@@ -30,7 +30,7 @@ func UpdateProductHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		store := storageProduct.NewSQLStorage(db)
-		business := bizProduct.UpdateProductBiz(store)
+		business := bizProduct.NewUpdateProductBiz(store)
 
 		if err := business.UpdateProduct(ctx.Request.Context(), id, &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)

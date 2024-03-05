@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func FindProductHandler(db *gorm.DB) gin.HandlerFunc {
+func FindProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
@@ -21,7 +21,7 @@ func FindProductHandler(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		store := storageProduct.NewSQLStorage(db)
-		business := bizProduct.FindProductBiz(store)
+		business := bizProduct.NewFindProductBiz(store)
 
 		data, err := business.FindProduct(ctx.Request.Context(), id)
 

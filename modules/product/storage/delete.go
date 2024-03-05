@@ -4,6 +4,8 @@ import (
 	"context"
 	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
+
+	"gorm.io/gorm"
 )
 
 func (s *sqlStorage) DeleteProduct(
@@ -15,6 +17,10 @@ func (s *sqlStorage) DeleteProduct(
 		Updates(map[string]interface{}{
 			"status": modelProduct.STATUS_DELETED,
 		}).Error; err != nil {
+		if err != gorm.ErrRecordNotFound {
+			return common.RecordNoFound
+		}
+
 		return common.ErrDB(err)
 	}
 

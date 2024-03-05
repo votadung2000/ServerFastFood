@@ -53,11 +53,11 @@ func Router() {
 
 		product := v1.Group("/product", middlewareAuth)
 		{
-			product.POST("", ginProduct.CreateProductHandler(db))
-			product.GET("", ginProduct.ListProductHandler(db))
-			product.GET("/:id", ginProduct.FindProductHandler(db))
-			product.PATCH("/:id", ginProduct.UpdateProductHandler(db))
-			product.DELETE("/:id", ginProduct.DeleteProductHandler(db))
+			product.POST("", ginProduct.CreateProductHdl(db))
+			product.GET("", ginProduct.ListProductHdl(db))
+			product.GET("/:id", ginProduct.FindProductHdl(db))
+			product.PATCH("/:id", ginProduct.UpdateProductHdl(db))
+			product.DELETE("/:id", ginProduct.DeleteProductHdl(db))
 		}
 
 		favorite := v1.Group("/favorite", middlewareAuth)
