@@ -49,7 +49,7 @@ type ProductCreate struct {
 	Name        string  `json:"name" gorm:"column:name;"`
 	ImageId     int     `json:"image_id" gorm:"column:image_id;"`
 	Taste       string  `json:"taste" gorm:"column:taste;"`
-	Price       int     `json:"price" gorm:"column:price;"`
+	Price       float32 `json:"price" gorm:"column:price;"`
 	CategoryId  int     `json:"category_id" gorm:"column:category_id;"`
 	Discount    float32 `json:"discount" gorm:"column:discount;"`
 	Description string  `json:"description" gorm:"column:description;"`
@@ -77,12 +77,15 @@ func (p *ProductCreate) Validate() error {
 }
 
 type ProductUpdate struct {
-	Name     *string `json:"name" gorm:"column:name;"`
-	Status   *int    `json:"status" gorm:"column:status;"`
-	Image    *string `json:"image" gorm:"column:image;"`
-	Taste    *string `json:"taste" gorm:"column:taste;"`
-	Price    *int    `json:"price" gorm:"column:price;"`
-	Discount *int    `json:"discount" gorm:"column:discount;"`
+	Name        *string  `json:"name" gorm:"column:name;"`
+	Status      *int     `json:"status" gorm:"column:status;"`
+	ImageId     *int     `json:"image_id" gorm:"column:image_id;"`
+	Taste       *string  `json:"taste" gorm:"column:taste;"`
+	Price       *float32 `json:"price" gorm:"column:price;"`
+	Discount    *int     `json:"discount" gorm:"column:discount;"`
+	Description *string  `json:"description" gorm:"column:description;"`
+	Quantity    *int     `json:"quantity" gorm:"column:quantity;"`
+	Featured    *int     `json:"featured" gorm:"column:featured;"`
 }
 
 func (ProductUpdate) TableName() string {
