@@ -2,6 +2,7 @@ package bizProduct
 
 import (
 	"context"
+	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
 )
 
@@ -20,7 +21,7 @@ func FindProductBiz(store FindProductStorage) *findProductBiz {
 func (biz *findProductBiz) FindProduct(ctx context.Context, id int) (*modelProduct.Product, error) {
 	data, err := biz.store.FindProduct(ctx, map[string]interface{}{"id": id})
 	if err != nil {
-		return nil, err
+		return nil, common.ErrCannotGetEntity(modelProduct.EntityName, err)
 	}
 
 	return data, nil

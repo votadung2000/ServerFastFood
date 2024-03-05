@@ -2,6 +2,7 @@ package storageProduct
 
 import (
 	"context"
+	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
 )
 
@@ -13,7 +14,7 @@ func (s *sqlStorage) UpdateProduct(
 	if err := s.db.Where(cond).
 		Updates(dataUpdate).
 		First(dataUpdate).Error; err != nil {
-		return err
+		return common.ErrDB(err)
 	}
 
 	return nil
