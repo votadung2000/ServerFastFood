@@ -50,12 +50,11 @@ type UserCreate struct {
 	UserName    string `json:"user_name" gorm:"column:user_name;"`
 	Password    string `json:"password" gorm:"column:password;"`
 	Salt        string `json:"-" gorm:"column:salt"`
-	Status      int    `json:"status" gorm:"column:status;"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
 	Email       string `json:"email" gorm:"column:email"`
 	Address     int    `json:"address" gorm:"column:address"`
 	Role        int    `json:"role" gorm:"column:role"`
-	AvatarId    int    `json:"-" gorm:"column:avatar_id"`
+	AvatarId    int    `json:"avatar_id" gorm:"column:avatar_id"`
 }
 
 func (UserCreate) TableName() string {
