@@ -1,6 +1,9 @@
 package modelUser
 
-import "fastFood/common"
+import (
+	"fastFood/common"
+	"strings"
+)
 
 const (
 	STATUS_ACTION  = 1
@@ -12,11 +15,20 @@ const (
 	ROLE_ADMIN = 3
 )
 
-type Users struct {
+var (
+	ErrDeleted            = "the user has been deleted"
+	ErrUserNameIsBlank    = "User name cannot be blank"
+	ErrPasswordIsBlank    = "Password cannot be blank"
+	ErrNameIsBlank        = "Last name cannot be blank"
+	ErrPhoneNumberIsBlank = "Phone number cannot be blank"
+	ErrEmailIsBlank       = "Email cannot be blank"
+)
+
+type User struct {
 	common.SQLModel
 	Name        string `json:"name" gorm:"column:name;"`
 	UserName    string `json:"user_name" gorm:"column:user_name;"`
-	PassWord    string `json:"-" gorm:"column:password;"`
+	Password    string `json:"-" gorm:"column:password;"`
 	Salt        string `json:"-" gorm:"column:salt"`
 	Status      int    `json:"status" gorm:"column:status;"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
@@ -26,6 +38,54 @@ type Users struct {
 	AvatarId    int    `json:"-" gorm:"column:avatar_id"`
 }
 
-func (Users) TableUsers() string {
+func (User) TableName() string {
 	return "users"
+}
+
+type UserCreate struct {
+	common.SQLModel
+	Name        string `json:"name" gorm:"column:name;"`
+	UserName    string `json:"user_name" gorm:"column:user_name;"`
+	Password    string `json:"-" gorm:"column:password;"`
+	Salt        string `json:"-" gorm:"column:salt"`
+	Status      int    `json:"status" gorm:"column:status;"`
+	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
+	Email       string `json:"email" gorm:"column:email"`
+	Address     int    `json:"address" gorm:"column:address"`
+	Role        int    `json:"role" gorm:"column:role"`
+	AvatarId    int    `json:"-" gorm:"column:avatar_id"`
+}
+
+func (UserCreate) TableName() string {
+	return User{}.TableName()
+}
+
+func (i *UserCreate) Validate() error {
+	i.UserName = strings.TrimSpace(i.UserName)
+	i.Password = strings.TrimSpace(i.Password)
+	i.Name = strings.TrimSpace(i.Name)
+	i.PhoneNumber = strings.TrimSpace(i.PhoneNumber)
+	i.Email = strings.TrimSpace(i.Email)
+
+	if i.UserName == "" {
+		return ErrValidateRequest(ErrUserNameIsBlank, "ERR_USER_NAME_IS_BLANK")
+	}
+
+	if i.Password == "" {
+		return ErrValidateRequest(ErrPasswordIsBlank, "ERR_PASSWORD_IS_BLANK")
+	}
+
+	if i.Name == "" {
+		return ErrValidateRequest(ErrNameIsBlank, "ERR_AME_IS_BLANK")
+	}
+
+	if i.PhoneNumber == "" {
+		return ErrValidateRequest(ErrPhoneNumberIsBlank, "ERR_PHONE_NUMBER_IS_BLANK")
+	}
+
+	if i.Email == "" {
+		return ErrValidateRequest(ErrEmailIsBlank, "ERR_EMAIL_IS_BLANK")
+	}
+
+	return nil
 }
