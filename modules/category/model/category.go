@@ -18,9 +18,10 @@ var (
 
 type Category struct {
 	common.SQLModel
-	Name    string `json:"name" gorm:"column:name;"`
-	Status  int    `json:"status" gorm:"column:status;"`
-	ImageId int    `json:"image_id" gorm:"column:image_id;"`
+	Name    string               `json:"name" gorm:"column:name;"`
+	Status  int                  `json:"status" gorm:"column:status;"`
+	ImageId int                  `json:"-" gorm:"column:image_id;"`
+	Image   *common.PreloadImage `json:"image" gorm:"foreignKey:ImageId"`
 }
 
 func (Category) TableName() string {

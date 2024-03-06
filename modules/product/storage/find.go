@@ -11,7 +11,7 @@ import (
 func (s *sqlStorage) FindProduct(ctx context.Context, cond map[string]interface{}) (*modelProduct.Product, error) {
 	var data modelProduct.Product
 
-	if err := s.db.Where(cond).First(&data).Error; err != nil {
+	if err := s.db.Preload("Image").Where(cond).First(&data).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, common.RecordNoFound
 		}
