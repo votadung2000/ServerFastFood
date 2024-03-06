@@ -35,11 +35,6 @@ func CreateImageHdl(db *gorm.DB) gin.HandlerFunc {
 
 		typePathStr := ctx.PostForm("typePath")
 
-		// if typePathStr == "" {
-		// 	ctx.JSON(http.StatusBadRequest, modelUpload.ErrMissingField(err))
-		// 	return
-		// }
-
 		typePathInt := common.TYPE_IMG_OTHER
 
 		if typePathStr != "" {
