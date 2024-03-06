@@ -8,6 +8,7 @@ import (
 	ginCategory "fastFood/modules/category/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
+	ginUpload "fastFood/modules/upload/transport/gin"
 	storageUser "fastFood/modules/user/storage"
 	ginUser "fastFood/modules/user/transport/gin"
 	"os"
@@ -31,11 +32,6 @@ func Router() {
 
 	v1 := router.Group("/v1")
 	{
-		// upload := v1.Group("/upload", middlewareAuth)
-		// {
-		// 	upload.PUT("", upload.Upload(db))
-		// }
-
 		{
 			v1.POST("/login", ginUser.LoginHdl(db, tokenProvider))
 			v1.POST("/register", ginUser.RegisterHdl(db))
@@ -65,6 +61,11 @@ func Router() {
 			favorite.POST("", ginFavorite.CreateFavoriteHandler(db))
 			// v1.GET("/favorite", favorite.GetAllFavorites(db))
 			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHandler(db))
+		}
+
+		upload := v1.Group("/upload", middlewareAuth)
+		{
+			upload.PUT("", ginUpload.CreateImageHdl(db))
 		}
 	}
 

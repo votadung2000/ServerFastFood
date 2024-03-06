@@ -7,24 +7,33 @@ import (
 	"fmt"
 )
 
+const (
+	TYPE_IMG_PROFILE  = 1
+	TYPE_IMG_CATEGORY = 2
+	TYPE_IMG_PRODUCT  = 3
+	TYPE_IMG_OTHER    = 0
+)
+
 type Image struct {
-	Id        int    `json:"id" gorm:"column:id"`
+	SQLModel
 	Url       string `json:"url" gorm:"column:url"`
 	Width     int    `json:"width" gorm:"column:width"`
 	Height    int    `json:"height" gorm:"column:height"`
-	CloudName string `json:"cloud_name,omitempty" gorm:"-"`
-	Extension string `json:"extension,omitempty" gorm:"-"`
+	Type      int    `json:"type" gorm:"column:type"`
+	CloudName string `json:"cloud_name,omitempty" gorm:"column:cloud_name"`
+	Extension string `json:"extension,omitempty" gorm:"column:extension"`
 }
 
 func (Image) TableName() string {
 	return "images"
 }
 
-func (j *Image) Fulfil(domain string) {
-	j.Url = fmt.Sprintf("%s/%s", domain, j.Url)
+func (i *Image) Fulfil(domain string) {
+	i.Url = fmt.Sprintf("%s/%s", domain, i.Url)
 }
 
-func (j *Image) Scan(value interface{}) error {
+// get interface of DB ->
+func (i *Image) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
@@ -35,14 +44,16 @@ func (j *Image) Scan(value interface{}) error {
 		return err
 	}
 
-	*j = img
+	*i = img
+
 	return nil
 }
 
-func (j *Image) Value() (driver.Value, error) {
-	if j == nil {
+// struct -> DB
+func (i *Image) Value() (driver.Value, error) {
+	if i == nil {
 		return nil, nil
 	}
 
-	return json.Marshal(j)
+	return json.Marshal(i)
 }
