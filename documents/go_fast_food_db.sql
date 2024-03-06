@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: go_fast_food_db
--- Generation Time: 2024-03-05 17:30:06.1680
+-- Generation Time: 2024-03-06 16:03:27.1530
 -- -------------------------------------------------------------
 
 
@@ -34,6 +34,18 @@ CREATE TABLE `favorites` (
   `user_id` int NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `images` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) DEFAULT NULL,
+  `width` int DEFAULT NULL,
+  `height` int DEFAULT NULL,
+  `cloud_name` varchar(255) DEFAULT NULL,
+  `extension` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -73,8 +85,8 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `categories` (`id`, `name`, `image_id`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Burger', 0, 1, '2024-03-05 09:25:48', '2024-03-05 09:53:51'),
-(2, 'Pizza', 0, 1, '2024-03-05 09:26:08', '2024-03-05 09:26:08'),
+(1, 'Burger', 1, 1, '2024-03-05 09:25:48', '2024-03-06 07:37:57'),
+(2, 'Pizza', 2, 1, '2024-03-05 09:26:08', '2024-03-06 07:38:04'),
 (3, 'Sandwich', 0, 1, '2024-03-05 09:26:12', '2024-03-05 09:26:12'),
 (4, 'Fruits', 0, 1, '2024-03-05 09:26:16', '2024-03-05 09:58:33');
 

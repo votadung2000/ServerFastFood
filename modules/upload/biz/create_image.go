@@ -48,8 +48,8 @@ func (biz *createImageBiz) CreateImage(ctx context.Context, data []byte, fileNam
 	img.CloudName = "local"
 	img.Extension = fileExt
 
-	domain := os.Getenv("DOMAIN")
-	img.Fulfil(domain)
+	// domain := os.Getenv("DOMAIN")
+	// img.Fulfil(domain)
 
 	if err := biz.store.InsertImage(ctx, img); err != nil {
 		return modelUpload.ErrCannotCreateEntity(err)
