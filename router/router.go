@@ -66,6 +66,7 @@ func Router() {
 		upload := v1.Group("/upload", middlewareAuth)
 		{
 			upload.PUT("", ginUpload.CreateImageHdl(db))
+			upload.GET("/:id", ginUpload.FindImageHdl(db))
 		}
 	}
 
