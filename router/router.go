@@ -38,7 +38,7 @@ func Router() {
 			v1.GET("/profile", middlewareAuth, ginUser.ProfileUserHandler(db))
 		}
 
-		category := v1.Group("/category", middlewareAuth)
+		category := v1.Group("/category")
 		{
 			category.POST("", ginCategory.CreateCategoryHdl(db))
 			category.GET("", ginCategory.ListCategoryHdl(db))
@@ -47,7 +47,7 @@ func Router() {
 			category.DELETE("/:id", ginCategory.DeleteCategoryHdl(db))
 		}
 
-		product := v1.Group("/product", middlewareAuth)
+		product := v1.Group("/product")
 		{
 			product.POST("", ginProduct.CreateProductHdl(db))
 			product.GET("", ginProduct.ListProductHdl(db))

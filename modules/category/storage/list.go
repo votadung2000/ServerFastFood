@@ -34,7 +34,7 @@ func (s *sqlStorage) ListCategory(
 	db = db.Preload("Image")
 
 	if err := db.Select("*").
-		Order("id desc").
+		// Order("id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {
