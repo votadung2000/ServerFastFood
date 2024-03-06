@@ -41,7 +41,10 @@ func (s *sqlStorage) ListProduct(
 		return nil, common.ErrDB(err)
 	}
 
-	if err := db.Select("*").Order("id desc").
+	db = db.Preload("Image")
+
+	if err := db.Select("*").
+		Order("id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {

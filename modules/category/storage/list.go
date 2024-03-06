@@ -27,11 +27,14 @@ func (s *sqlStorage) ListCategory(
 		}
 	}
 
-	if err := db.Table(modelCategory.Category{}.TableName()).Count(&paging.Total).Error; err != nil {
+	if err := db.Select("id").Table(modelCategory.Category{}.TableName()).Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 
-	if err := db.Order("id desc").
+	db = db.Preload("Image")
+
+	if err := db.Select("*").
+		Order("id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {
