@@ -2,6 +2,7 @@ package modelCategory
 
 import (
 	"fastFood/common"
+	modelProduct "fastFood/modules/product/model"
 	"strings"
 )
 
@@ -18,10 +19,11 @@ var (
 
 type Category struct {
 	common.SQLModel
-	Name    string               `json:"name" gorm:"column:name;"`
-	Status  int                  `json:"status" gorm:"column:status;"`
-	ImageId int                  `json:"-" gorm:"column:image_id;"`
-	Image   *common.PreloadImage `json:"image" gorm:"foreignKey:ImageId"`
+	Name     string                  `json:"name" gorm:"column:name;"`
+	Status   int                     `json:"status" gorm:"column:status;"`
+	ImageId  int                     `json:"-" gorm:"column:image_id;"`
+	Image    *common.PreloadImage    `json:"image" gorm:"foreignKey:ImageId"`
+	Products []*modelProduct.Product `json:"products" gorm:"foreignKey:CategoryId"`
 }
 
 func (Category) TableName() string {

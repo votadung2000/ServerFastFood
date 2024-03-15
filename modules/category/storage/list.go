@@ -4,6 +4,7 @@ import (
 	"context"
 	"fastFood/common"
 	modelCategory "fastFood/modules/category/model"
+	modelProduct "fastFood/modules/product/model"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +33,12 @@ func (s *sqlStorage) ListCategory(
 	}
 
 	db = db.Preload("Image")
+	db = db.Preload("Products", func(dbPros *gorm.DB) *gorm.DB {
+		dbPros = dbPros.Preload("Image")
+		dbPros = dbPros.Where("status = ?", modelProduct.STATUS_ACTION)
+		dbPros = dbPros.Where("featured = ?", modelProduct.FEATURED_OUTSTANDING)
+		return dbPros.Order("id desc")
+	})
 
 	if err := db.Select("*").
 		// Order("id desc").
