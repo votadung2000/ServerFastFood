@@ -1,7 +1,11 @@
 package modelProduct
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"fastFood/common"
+	"fmt"
 	"strings"
 )
 
@@ -91,4 +95,30 @@ type ProductUpdate struct {
 
 func (ProductUpdate) TableName() string {
 	return Product{}.TableName()
+}
+
+// get interface of DB ->
+func (p *Product) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
+	}
+
+	var pros Product
+	if err := json.Unmarshal(bytes, &pros); err != nil {
+		return err
+	}
+
+	*p = pros
+
+	return nil
+}
+
+// struct -> DB
+func (p *Product) Value() (driver.Value, error) {
+	if p == nil {
+		return nil, nil
+	}
+
+	return json.Marshal(p)
 }
