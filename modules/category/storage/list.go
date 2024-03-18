@@ -37,7 +37,7 @@ func (s *sqlStorage) ListCategory(
 		dbPros = dbPros.Preload("Image")
 		dbPros = dbPros.Where("status = ?", modelProduct.STATUS_ACTION)
 		dbPros = dbPros.Where("featured = ?", modelProduct.FEATURED_OUTSTANDING)
-		return dbPros.Order("id desc")
+		return dbPros.Order("id asc")
 	})
 
 	if err := db.Select("*").
