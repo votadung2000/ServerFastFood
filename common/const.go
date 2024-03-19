@@ -12,3 +12,7 @@ func RecoverConst() {
 		fmt.Println("Recovered:", r)
 	}
 }
+
+type Requester interface {
+	GetUserId() int
+}

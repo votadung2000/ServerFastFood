@@ -44,6 +44,10 @@ func (User) TableName() string {
 	return "users"
 }
 
+func (u *User) GetUserId() int {
+	return u.Id
+}
+
 type UserCreate struct {
 	common.SQLModel
 	Name        string `json:"name" gorm:"column:name;"`
