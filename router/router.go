@@ -38,7 +38,7 @@ func Router() {
 			v1.GET("/profile", middlewareAuth, ginUser.ProfileUserHandler(db))
 		}
 
-		category := v1.Group("/category")
+		category := v1.Group("/category", middlewareAuth)
 		{
 			category.POST("", ginCategory.CreateCategoryHdl(db))
 			category.GET("", ginCategory.ListCategoryHdl(db))
@@ -47,7 +47,7 @@ func Router() {
 			category.DELETE("/:id", ginCategory.DeleteCategoryHdl(db))
 		}
 
-		product := v1.Group("/product")
+		product := v1.Group("/product", middlewareAuth)
 		{
 			product.POST("", ginProduct.CreateProductHdl(db))
 			product.GET("", ginProduct.ListProductHdl(db))
@@ -59,7 +59,7 @@ func Router() {
 		favorite := v1.Group("/favorite", middlewareAuth)
 		{
 			favorite.POST("", ginFavorite.CreateFavoriteHdl(db))
-			favorite.GET("/:id", ginFavorite.ListFavoriteHdl(db))
+			favorite.GET("", ginFavorite.ListFavoriteHdl(db))
 			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHdl(db))
 		}
 

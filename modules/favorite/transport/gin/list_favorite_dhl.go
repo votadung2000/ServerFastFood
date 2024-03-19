@@ -6,7 +6,6 @@ import (
 	modelFavorite "fastFood/modules/favorite/model"
 	storageFavorite "fastFood/modules/favorite/storage"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -14,12 +13,7 @@ import (
 
 func ListFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		id, err := strconv.Atoi(ctx.Param("id"))
-
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
-			return
-		}
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
 
 		var paging common.Paging
 
@@ -40,7 +34,7 @@ func ListFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 		store := storageFavorite.NewSQLStorage(db)
 		business := bizFavorite.NewListFavoriteBiz(store)
 
-		data, err := business.ListFavorite(ctx.Request.Context(), id, &filter, &paging)
+		data, err := business.ListFavorite(ctx.Request.Context(), user.GetUserId(), &filter, &paging)
 
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
