@@ -3,6 +3,7 @@ package modelFavorite
 import (
 	"errors"
 	"fastFood/common"
+	modelProduct "fastFood/modules/product/model"
 )
 
 const (
@@ -20,9 +21,10 @@ var (
 
 type Favorite struct {
 	common.SQLModel
-	UserId    int `json:"user_id" gorm:"column:user_id;"`
-	ProductId int `json:"product_id" gorm:"column:product_id;"`
-	Status    int `json:"status" gorm:"column:status;"`
+	UserId    int                          `json:"user_id" gorm:"column:user_id;"`
+	Status    int                          `json:"status" gorm:"column:status;"`
+	ProductId int                          `json:"-" gorm:"column:product_id;"`
+	Product   *modelProduct.PreloadProduct `json:"product" gorm:"foreignKey:ProductId"`
 }
 
 func (Favorite) TableName() string {

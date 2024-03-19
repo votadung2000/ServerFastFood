@@ -12,7 +12,6 @@ type ListFavoriteStorage interface {
 		cond map[string]interface{},
 		filter *modelFavorite.Filter,
 		paging *common.Paging,
-		moreKeys ...string,
 	) ([]modelFavorite.Favorite, error)
 }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fastFood/common"
 	modelFavorite "fastFood/modules/favorite/model"
+	modelProduct "fastFood/modules/product/model"
 
 	"gorm.io/gorm"
 )
@@ -13,15 +14,10 @@ func (s *sqlStorage) ListFavorite(
 	cond map[string]interface{},
 	filter *modelFavorite.Filter,
 	paging *common.Paging,
-	moreKeys ...string,
 ) ([]modelFavorite.Favorite, error) {
 	var result []modelFavorite.Favorite
 
 	db := s.db.Where(cond)
-
-	// if f := filter; f != nil {
-
-	// }
 
 	if err := db.
 		Select("id").
@@ -29,6 +25,12 @@ func (s *sqlStorage) ListFavorite(
 		Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
+
+	db = db.Preload("Product", func(dbPros *gorm.DB) *gorm.DB {
+		dbPros = dbPros.Preload("Image")
+		dbPros = dbPros.Where("status = ?", modelProduct.STATUS_ACTION)
+		return dbPros
+	})
 
 	if err := db.Select("*").
 		Order("id desc").
