@@ -30,6 +30,26 @@ var (
 	ErrCategoryIsBlank = "category product cannot be blank"
 )
 
+type PreloadProduct struct {
+	common.SQLModel
+	Name        string               `json:"name" gorm:"column:name;"`
+	Taste       string               `json:"taste" gorm:"column:taste;"`
+	Price       float32              `json:"price" gorm:"column:price;"`
+	CategoryId  int                  `json:"category_id" gorm:"column:category_id;"`
+	Discount    float32              `json:"discount" gorm:"column:discount;"`
+	Status      int                  `json:"status" gorm:"column:status;"`
+	Description string               `json:"description" gorm:"column:description;"`
+	Quantity    int                  `json:"quantity" gorm:"column:quantity;"`
+	Sold        int                  `json:"sold" gorm:"column:sold;"`
+	Featured    int                  `json:"featured" gorm:"column:featured;"`
+	ImageId     int                  `json:"-" gorm:"column:image_id;"`
+	Image       *common.PreloadImage `json:"image" gorm:"foreignKey:ImageId"`
+}
+
+func (PreloadProduct) TableName() string {
+	return Product{}.TableName()
+}
+
 type Product struct {
 	common.SQLModel
 	Name        string               `json:"name" gorm:"column:name;"`
