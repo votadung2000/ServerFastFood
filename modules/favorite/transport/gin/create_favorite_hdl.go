@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateFavoriteHandler(db *gorm.DB) gin.HandlerFunc {
+func CreateFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var data modelFavorite.FavoriteCreate
 

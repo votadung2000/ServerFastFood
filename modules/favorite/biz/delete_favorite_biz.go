@@ -3,7 +3,6 @@ package bizFavorite
 import (
 	"context"
 	modelFavorite "fastFood/modules/favorite/model"
-	"fmt"
 )
 
 type DeleteFavoriteStorage interface {
@@ -25,8 +24,6 @@ func (biz *deleteFavoriteBiz) DeleteFavorite(ctx context.Context, id int) error 
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("data", data)
 
 	if data.Status != 0 && data.Status == modelFavorite.STATUS_DELETED {
 		return modelFavorite.ErrDeleted
