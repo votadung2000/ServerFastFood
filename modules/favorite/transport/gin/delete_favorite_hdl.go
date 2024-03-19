@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeleteFavoriteHandler(db *gorm.DB) gin.HandlerFunc {
+func DeleteFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 

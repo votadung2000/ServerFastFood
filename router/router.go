@@ -58,9 +58,9 @@ func Router() {
 
 		favorite := v1.Group("/favorite", middlewareAuth)
 		{
-			favorite.POST("", ginFavorite.CreateFavoriteHandler(db))
-			// v1.GET("/favorite", favorite.GetAllFavorites(db))
-			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHandler(db))
+			favorite.POST("", ginFavorite.CreateFavoriteHdl(db))
+			favorite.GET("/:id", ginFavorite.ListFavoriteHdl(db))
+			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHdl(db))
 		}
 
 		upload := v1.Group("/upload", middlewareAuth)

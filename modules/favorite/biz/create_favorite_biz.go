@@ -18,12 +18,8 @@ func CreateFavoriteBiz(store CreateFavoriteStorage) *createFavoriteBiz {
 }
 
 func (biz *createFavoriteBiz) CreateFavorite(ctx context.Context, data *modelFavorite.FavoriteCreate) error {
-	if data.UserId == 0 {
-		return modelFavorite.ErrUserIsBlank
-	}
-
-	if data.ProductId == 0 {
-		return modelFavorite.ErrProductIsBlank
+	if err := data.Validate(); err != nil {
+		return err
 	}
 
 	if err := biz.store.CreateFavorite(ctx, data); err != nil {
