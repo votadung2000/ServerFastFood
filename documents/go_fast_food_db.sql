@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: go_fast_food_db
--- Generation Time: 2024-03-18 15:05:49.3070
+-- Generation Time: 2024-04-04 15:41:31.6860
 -- -------------------------------------------------------------
 
 
@@ -32,10 +32,11 @@ CREATE TABLE `favorites` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL,
   `user_id` int NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `images` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -48,6 +49,34 @@ CREATE TABLE `images` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `order_item` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `order_id` int NOT NULL,
+  `product_id` int NOT NULL,
+  `product_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
+  `quantity` int NOT NULL,
+  `price` decimal(18,2) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `orders` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
+  `tax_fees` decimal(18,2) NOT NULL DEFAULT '0.00',
+  `delivery_fee` decimal(18,2) NOT NULL DEFAULT '0.00',
+  `total` decimal(18,2) NOT NULL,
+  `coupon_id` int DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `canceled_at` datetime DEFAULT NULL,
+  `completed_at` datetime DEFAULT NULL,
+  `delivery_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -89,6 +118,10 @@ INSERT INTO `categories` (`id`, `name`, `image_id`, `status`, `created_at`, `upd
 (2, 'Pizza', 2, 1, '2024-03-05 09:26:08', '2024-03-06 07:38:04'),
 (3, 'Sandwich', 3, 1, '2024-03-05 09:26:12', '2024-03-07 01:46:06'),
 (4, 'Fruits', 4, 1, '2024-03-05 09:26:16', '2024-03-07 01:46:15');
+
+INSERT INTO `favorites` (`id`, `product_id`, `user_id`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, '2024-03-19 06:43:25', '2024-03-19 06:43:25'),
+(2, 2, 1, 1, '2024-03-19 07:09:59', '2024-03-19 07:09:59');
 
 INSERT INTO `images` (`id`, `url`, `width`, `height`, `cloud_name`, `extension`, `created_at`, `updated_at`) VALUES
 (1, 'static/1709775915665309000_burger.png', 512, 512, 'local', '.png', '2024-03-07 08:45:16', '2024-03-07 08:45:16'),
