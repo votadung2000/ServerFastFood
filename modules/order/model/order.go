@@ -41,12 +41,11 @@ func (Order) TableName() string {
 }
 
 type CreateOrder struct {
-	UserId      int        `json:"user_id" gorm:"column:user_id;"`
-	TaxFees     float64    `json:"tax_fees" gorm:"column:tax_fees;"`
-	DeliveryFee float64    `json:"delivery_fee" gorm:"column:delivery_fee;"`
-	Total       float64    `json:"total" gorm:"column:total;"`
-	CouponId    int        `json:"coupon_id" gorm:"column:coupon_id;"`
-	CreatedAt   *time.Time `json:"created_at" gorm:"column:created_at;"`
+	UserId      int     `json:"user_id" gorm:"column:user_id;"`
+	TaxFees     float64 `json:"tax_fees" gorm:"column:tax_fees;"`
+	DeliveryFee float64 `json:"delivery_fee" gorm:"column:delivery_fee;"`
+	Total       float64 `json:"total" gorm:"column:total;"`
+	CouponId    int     `json:"coupon_id" gorm:"column:coupon_id;"`
 }
 
 func (CreateOrder) TableName() string {
