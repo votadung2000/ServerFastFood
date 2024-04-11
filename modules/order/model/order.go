@@ -1,6 +1,10 @@
 package modelOrder
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"time"
 )
 
@@ -40,7 +44,17 @@ func (Order) TableName() string {
 	return "orders"
 }
 
+type OrderParams struct {
+	UserId      int                   `json:"user_id" gorm:"column:user_id;"`
+	TaxFees     float64               `json:"tax_fees" gorm:"column:tax_fees;"`
+	DeliveryFee float64               `json:"delivery_fee" gorm:"column:delivery_fee;"`
+	Total       float64               `json:"total" gorm:"column:total;"`
+	CouponId    int                   `json:"coupon_id" gorm:"column:coupon_id;"`
+	Products    MultipleProductParams `json:"products"`
+}
+
 type CreateOrder struct {
+	Id          int     `json:"id"`
 	UserId      int     `json:"user_id" gorm:"column:user_id;"`
 	TaxFees     float64 `json:"tax_fees" gorm:"column:tax_fees;"`
 	DeliveryFee float64 `json:"delivery_fee" gorm:"column:delivery_fee;"`
@@ -61,4 +75,39 @@ func (o *CreateOrder) Validate() error {
 	}
 
 	return nil
+}
+
+type ProductParams struct {
+	Id       int     `json:"id"`
+	Name     string  `json:"name"`
+	Quantity int     `json:"quantity"`
+	Price    float32 `json:"price"`
+}
+
+type MultipleProductParams []ProductParams
+
+// get interface of DB ->
+func (i *MultipleProductParams) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
+	}
+
+	var product MultipleProductParams
+	if err := json.Unmarshal(bytes, &product); err != nil {
+		return err
+	}
+
+	*i = product
+
+	return nil
+}
+
+// struct -> DB
+func (i *MultipleProductParams) Value() (driver.Value, error) {
+	if i == nil {
+		return nil, nil
+	}
+
+	return json.Marshal(i)
 }

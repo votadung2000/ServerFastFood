@@ -2,9 +2,10 @@ package ginOrder
 
 import (
 	"fastFood/common"
-	bizOrder "fastFood/modules/order/biz"
 	modelOrder "fastFood/modules/order/model"
+	repoOrder "fastFood/modules/order/repository"
 	storageOrder "fastFood/modules/order/storage"
+	storageOrderItem "fastFood/modules/order_item/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,17 +14,19 @@ import (
 
 func CreateOrderHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		var data modelOrder.CreateOrder
+		var data modelOrder.OrderParams
 
 		if err := ctx.ShouldBind(&data); err != nil {
 			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
-		store := storageOrder.NewSQLStorage(db)
-		business := bizOrder.NewCreateOrder(store)
+		storeOrder := storageOrder.NewSQLStorage(db)
+		storeOrderItem := storageOrderItem.NewSQLStorage(db)
 
-		if err := business.CreateOrder(ctx.Request.Context(), &data); err != nil {
+		repo := repoOrder.NewCreateOrderRepo(storeOrder, storeOrderItem)
+
+		if err := repo.CreateOrder(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}

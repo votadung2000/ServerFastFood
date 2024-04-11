@@ -8,14 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *sqlStorage) CreateOrder(ctx context.Context, data *modelOrder.CreateOrder) error {
+func (s *sqlStorage) CreateOrder(ctx context.Context, data *modelOrder.CreateOrder) (int, error) {
 	if err := s.db.Create(data).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
-			return common.RecordNoFound
+			return 0, common.RecordNoFound
 		}
 
-		return common.ErrDB(err)
+		return 0, common.ErrDB(err)
 	}
 
-	return nil
+	return data.Id, nil
 }
