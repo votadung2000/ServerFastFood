@@ -31,13 +31,13 @@ func NewCreateOrderRepo(
 }
 
 func (repo *createOrderRepo) CreateOrder(ctx context.Context, data *modelOrder.OrderParams) error {
-	var order modelOrder.CreateOrder
-
-	order.UserId = data.UserId
-	order.TaxFees = data.TaxFees
-	order.DeliveryFee = data.DeliveryFee
-	order.Total = data.Total
-	order.CouponId = data.CouponId
+	order := modelOrder.CreateOrder{
+		UserId:      data.UserId,
+		TaxFees:     data.TaxFees,
+		DeliveryFee: data.DeliveryFee,
+		Total:       data.Total,
+		CouponId:    data.CouponId,
+	}
 
 	if err := order.Validate(); err != nil {
 		return err
@@ -52,11 +52,13 @@ func (repo *createOrderRepo) CreateOrder(ctx context.Context, data *modelOrder.O
 	var orderItems = make([]modelOrderItem.CreateOrderItem, len(data.Products))
 
 	for i, v := range data.Products {
-		orderItems[i].OrderId = id
-		orderItems[i].ProductId = v.Id
-		orderItems[i].ProductName = v.Name
-		orderItems[i].Quantity = v.Quantity
-		orderItems[i].Price = float64(v.Price)
+		orderItems[i] = modelOrderItem.CreateOrderItem{
+			OrderId:     id,
+			ProductId:   v.Id,
+			ProductName: v.Name,
+			Quantity:    v.Quantity,
+			Price:       float64(v.Price),
+		}
 
 		if err := orderItems[i].Validate(); err != nil {
 			return err
