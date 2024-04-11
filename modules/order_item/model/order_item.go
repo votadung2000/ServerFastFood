@@ -33,7 +33,7 @@ type OrderItem struct {
 }
 
 func (OrderItem) TableName() string {
-	return "orders"
+	return "order_item"
 }
 
 type CreateOrderItem struct {
