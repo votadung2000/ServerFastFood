@@ -30,6 +30,6 @@ func RegisterHdl(db *gorm.DB) gin.HandlerFunc {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
+		ctx.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }
