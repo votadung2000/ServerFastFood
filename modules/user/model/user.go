@@ -15,6 +15,10 @@ const (
 	ROLE_ADMIN = 3
 )
 
+const (
+	EntityName = "Product"
+)
+
 var (
 	ErrDeleted                  = "the user has been deleted"
 	ErrUserNameIsBlank          = "User name cannot be blank"
@@ -35,7 +39,7 @@ type User struct {
 	Status      int    `json:"status" gorm:"column:status;"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
 	Email       string `json:"email" gorm:"column:email"`
-	Address     int    `json:"address" gorm:"column:address"`
+	Address     string `json:"address" gorm:"column:address"`
 	Role        int    `json:"role" gorm:"column:role"`
 	AvatarId    int    `json:"-" gorm:"column:avatar_id"`
 }
@@ -49,16 +53,12 @@ func (u *User) GetUserId() int {
 }
 
 type UserCreate struct {
-	common.SQLModel
 	Name        string `json:"name" gorm:"column:name;"`
 	UserName    string `json:"user_name" gorm:"column:user_name;"`
 	Password    string `json:"password" gorm:"column:password;"`
 	Salt        string `json:"-" gorm:"column:salt"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
-	Email       string `json:"email" gorm:"column:email"`
-	Address     int    `json:"address" gorm:"column:address"`
 	Role        int    `json:"role" gorm:"column:role"`
-	AvatarId    int    `json:"avatar_id" gorm:"column:avatar_id"`
 }
 
 func (UserCreate) TableName() string {
@@ -70,7 +70,6 @@ func (i *UserCreate) Validate() error {
 	i.Password = strings.TrimSpace(i.Password)
 	i.Name = strings.TrimSpace(i.Name)
 	i.PhoneNumber = strings.TrimSpace(i.PhoneNumber)
-	i.Email = strings.TrimSpace(i.Email)
 
 	if i.UserName == "" {
 		return ErrValidateRequest(ErrUserNameIsBlank, "ERR_USER_NAME_IS_BLANK")
@@ -92,11 +91,40 @@ func (i *UserCreate) Validate() error {
 		return ErrValidateRequest(ErrInvalidPhoneNumberFormat, "ERR_INVALID_PHONE_NUMBER_FORMAT")
 	}
 
-	if i.Email == "" {
+	return nil
+}
+
+type UserUpdate struct {
+	Name        *string `json:"name,omitempty" gorm:"column:name;"`
+	Password    *string `json:"password,omitempty" gorm:"column:password;"`
+	PhoneNumber *string `json:"phone_number,omitempty" gorm:"column:phone_number"`
+	Email       *string `json:"email,omitempty" gorm:"column:email"`
+	Address     *string `json:"address,omitempty" gorm:"column:address"`
+	AvatarId    *int    `json:"avatar_id,omitempty" gorm:"column:avatar_id"`
+}
+
+func (UserUpdate) TableName() string {
+	return User{}.TableName()
+}
+
+func (i *UserUpdate) Validate() error {
+	if i.Name != nil && strings.TrimSpace(*i.Name) == "" {
+		return ErrValidateRequest(ErrNameIsBlank, "ERR_AME_IS_BLANK")
+	}
+
+	if i.PhoneNumber != nil && strings.TrimSpace(*i.PhoneNumber) == "" {
+		return ErrValidateRequest(ErrPhoneNumberIsBlank, "ERR_PHONE_NUMBER_IS_BLANK")
+	}
+
+	if i.PhoneNumber != nil && len(strings.TrimSpace(*i.PhoneNumber)) != 10 {
+		return ErrValidateRequest(ErrInvalidPhoneNumberFormat, "ERR_INVALID_PHONE_NUMBER_FORMAT")
+	}
+
+	if i.Email != nil && strings.TrimSpace(*i.Email) == "" {
 		return ErrValidateRequest(ErrEmailIsBlank, "ERR_EMAIL_IS_BLANK")
 	}
 
-	partsEmail := strings.Split(i.Email, "@")
+	partsEmail := strings.Split(strings.TrimSpace(*i.Email), "@")
 	if len(partsEmail) != 2 {
 		return ErrValidateRequest(ErrInvalidEmailFormat, "ERR_INVALID_EMAIL_FORMAT")
 	}
