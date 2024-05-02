@@ -96,7 +96,6 @@ func (i *UserCreate) Validate() error {
 
 type UserUpdate struct {
 	Name        *string `json:"name,omitempty" gorm:"column:name;"`
-	Password    *string `json:"password,omitempty" gorm:"column:password;"`
 	PhoneNumber *string `json:"phone_number,omitempty" gorm:"column:phone_number"`
 	Email       *string `json:"email,omitempty" gorm:"column:email"`
 	Address     *string `json:"address,omitempty" gorm:"column:address"`
