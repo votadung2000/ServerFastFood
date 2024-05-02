@@ -32,3 +32,19 @@ func ErrUserNameOrPasswordInvalid() *common.AppError {
 		"ERR_USER_NAME_OR_PASS_INVALID",
 	)
 }
+
+func ErrUserHasBeenDeleted() *common.AppError {
+	return common.CustomError(
+		errors.New("the user has been deleted"),
+		"the user has been deleted",
+		"ERR_USER_HAS_BEEN_DELETED",
+	)
+}
+
+func ErrUserHasBeenBlocked() *common.AppError {
+	return common.CustomError(
+		errors.New("the user has been blocked"),
+		"the user has been blocked",
+		"ERR_USER_HAS_BEEN_BLOCKED",
+	)
+}
