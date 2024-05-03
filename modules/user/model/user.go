@@ -123,9 +123,11 @@ func (i *UserUpdate) Validate() error {
 		return ErrValidateRequest(ErrEmailIsBlank, "ERR_EMAIL_IS_BLANK")
 	}
 
-	partsEmail := strings.Split(strings.TrimSpace(*i.Email), "@")
-	if len(partsEmail) != 2 {
-		return ErrValidateRequest(ErrInvalidEmailFormat, "ERR_INVALID_EMAIL_FORMAT")
+	if i.Email != nil && strings.TrimSpace(*i.Email) != "" {
+		partsEmail := strings.Split(strings.TrimSpace(*i.Email), "@")
+		if len(partsEmail) != 2 {
+			return ErrValidateRequest(ErrInvalidEmailFormat, "ERR_INVALID_EMAIL_FORMAT")
+		}
 	}
 
 	return nil
