@@ -38,6 +38,7 @@ func Router() {
 			v1.POST("/register", ginUser.RegisterHdl(db))
 			v1.GET("/profile", middlewareAuth, ginUser.ProfileUserHandler(db))
 			v1.PATCH("/update_user", middlewareAuth, ginUser.UpdateUserHdl(db))
+			v1.PATCH("/update_password", ginUser.UpdatePasswordHdl(db))
 		}
 
 		category := v1.Group("/category", middlewareAuth)
