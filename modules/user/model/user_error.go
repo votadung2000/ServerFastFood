@@ -25,6 +25,14 @@ func ErrCannotCreateEntity(err error) *common.AppError {
 	)
 }
 
+func ErrCannotChangePassword(err error) *common.AppError {
+	return common.CustomError(
+		err,
+		"Cannot change password",
+		"ERR_CANNOT_CHANGE_PASSWORD",
+	)
+}
+
 func ErrUserNameOrPasswordInvalid() *common.AppError {
 	return common.CustomError(
 		errors.New("user name or password invalid"),

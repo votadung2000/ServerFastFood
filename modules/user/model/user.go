@@ -142,3 +142,14 @@ type Login struct {
 func (Login) TableName() string {
 	return User{}.TableName()
 }
+
+type UpdatePassword struct {
+	UserName    string `json:"user_name" gorm:"column:user_name"`
+	Password    string `json:"password" gorm:"column:password"`
+	NewPassword string `json:"new_password"`
+	Salt        string `json:"-" gorm:"column:salt"`
+}
+
+func (UpdatePassword) TableName() string {
+	return User{}.TableName()
+}
