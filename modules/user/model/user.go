@@ -42,7 +42,7 @@ type User struct {
 	Address     string               `json:"address" gorm:"column:address"`
 	Role        int                  `json:"role" gorm:"column:role"`
 	AvatarId    int                  `json:"-" gorm:"column:avatar_id"`
-	Image       *common.PreloadImage `json:"image" gorm:"foreignKey:AvatarId"`
+	Image       *common.PreloadImage `json:"avatar" gorm:"foreignKey:AvatarId"`
 }
 
 func (User) TableName() string {
