@@ -11,7 +11,7 @@ import (
 func (s *sqlStorage) FindUser(ctx context.Context, cond map[string]interface{}) (*modelUser.User, error) {
 	var data modelUser.User
 
-	if err := s.db.Where(cond).First(&data).Error; err != nil {
+	if err := s.db.Preload("Image").Where(cond).First(&data).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return nil, common.RecordNoFound
 		}
