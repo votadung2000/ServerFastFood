@@ -4,7 +4,6 @@ import (
 	"context"
 	"fastFood/common"
 	modelUser "fastFood/modules/user/model"
-	"fmt"
 )
 
 type UpdatePasswordStorage interface {
@@ -23,27 +22,23 @@ func NewUpdatePasswordBiz(store UpdatePasswordStorage, hashery Hashery, expiry i
 }
 
 func (biz *updatePasswordBiz) UpdatePassword(ctx context.Context, data *modelUser.UpdatePassword) error {
-	user, err := biz.store.FindUser(ctx, map[string]interface{}{"user_name": data.UserName})
+	user, err := biz.store.FindUser(ctx, map[string]interface{}{"email": data.Email})
 
 	if err != nil {
 		return modelUser.ErrUserNameOrPasswordInvalid()
 	}
 
 	passHashed := biz.hashery.Hash(data.Password + user.Salt)
-	fmt.Println("passHashed", passHashed)
 
-	// if user.Password != passHashed {
-	// 	return modelUser.ErrUserNameOrPasswordInvalid()
-	// }
+	if user.Password != passHashed {
+		return modelUser.ErrUserNameOrPasswordInvalid()
+	}
 
 	salt := common.GenSalt(50)
-
 	data.Salt = salt
-	// data.Password = biz.hashery.Hash(data.NewPassword + salt)
-	fmt.Println("NewPassword", data.NewPassword)
-	data.Password = data.NewPassword
-
-	fmt.Println("data", data)
+	data.Password = biz.hashery.Hash(data.NewPassword + salt)
+	data.Email = ""
+	data.NewPassword = ""
 
 	if err := biz.store.UpdatePassword(ctx, map[string]interface{}{"id": user.Id}, data); err != nil {
 		return modelUser.ErrCannotChangePassword(err)
