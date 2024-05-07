@@ -18,8 +18,18 @@ type loginBiz struct {
 	expiry        int
 }
 
-func NewLoginBiz(store FindUserStorage, hashery Hashery, tokenProvider tokenProvider.Provider, expiry int) *loginBiz {
-	return &loginBiz{store: store, hashery: hashery, tokenProvider: tokenProvider, expiry: expiry}
+func NewLoginBiz(
+	store FindUserStorage,
+	hashery Hashery,
+	tokenProvider tokenProvider.Provider,
+	expiry int,
+) *loginBiz {
+	return &loginBiz{
+		store:         store,
+		hashery:       hashery,
+		tokenProvider: tokenProvider,
+		expiry:        expiry,
+	}
 }
 
 func (biz *loginBiz) Login(ctx context.Context, data *modelUser.Login) (tokenProvider.Token, error) {

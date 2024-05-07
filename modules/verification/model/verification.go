@@ -23,6 +23,10 @@ var (
 	ErrTokenIsBlank   = "Token cannot be blank"
 )
 
+type ParamsVerification struct {
+	Email string `json:"email"`
+}
+
 type Verification struct {
 	common.SQLModel
 	UserId  int    `json:"user_id" gorm:"column:user_id;"`
@@ -58,10 +62,6 @@ func (i *VerificationCreate) Validate() error {
 
 	if i.OTPCode == "" {
 		return ErrValidateRequest(ErrOTPCodeIsBlank, "ERR_OTP_CODE_IS_BLANK")
-	}
-
-	if i.Type == 0 {
-		return ErrValidateRequest(ErrTypeIsBlank, "ERR_TYPE_IS_BLANK")
 	}
 
 	if i.Token == "" {

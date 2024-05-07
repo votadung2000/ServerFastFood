@@ -25,6 +25,14 @@ func ErrCannotCreateEntity(err error) *common.AppError {
 	)
 }
 
+func ErrCannotFindEntity(err error) *common.AppError {
+	return common.CustomError(
+		err,
+		"Cannot find user",
+		"ERR_CANNOT_FIND_USER",
+	)
+}
+
 func ErrCannotChangePassword(err error) *common.AppError {
 	return common.CustomError(
 		err,
