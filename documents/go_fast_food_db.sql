@@ -1,10 +1,10 @@
 -- -------------------------------------------------------------
--- TablePlus 5.9.0(538)
+-- TablePlus 6.0.0(550)
 --
 -- https://tableplus.com/
 --
 -- Database: go_fast_food_db
--- Generation Time: 2024-04-04 15:41:31.6860
+-- Generation Time: 2024-05-07 16:20:39.0760
 -- -------------------------------------------------------------
 
 
@@ -48,7 +48,7 @@ CREATE TABLE `images` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `order_item` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -61,7 +61,7 @@ CREATE TABLE `order_item` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -76,7 +76,7 @@ CREATE TABLE `orders` (
   `completed_at` datetime DEFAULT NULL,
   `delivery_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `products` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -111,7 +111,19 @@ CREATE TABLE `users` (
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `verifications` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `otp_code` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `type` int NOT NULL DEFAULT '1',
+  `status` int NOT NULL DEFAULT '1',
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `categories` (`id`, `name`, `image_id`, `status`, `created_at`, `updated_at`) VALUES
 (1, 'Burger', 1, 1, '2024-03-05 09:25:48', '2024-03-06 07:37:57'),
@@ -138,7 +150,20 @@ INSERT INTO `images` (`id`, `url`, `width`, `height`, `cloud_name`, `extension`,
 (12, 'static/1710748768330323000_product_strawberry.png', 1920, 1200, 'local', '.png', '2024-03-18 14:59:28', '2024-03-18 14:59:28'),
 (13, 'static/1710748820693118000_product_grape.png', 1000, 667, 'local', '.png', '2024-03-18 15:00:21', '2024-03-18 15:00:21'),
 (14, 'static/1710748842693436000_product_apple.png', 1437, 1052, 'local', '.png', '2024-03-18 15:00:43', '2024-03-18 15:00:43'),
-(15, 'static/1710748865320730000_product_banana.jpeg', 738, 360, 'local', '.jpeg', '2024-03-18 15:01:05', '2024-03-18 15:01:05');
+(15, 'static/1710748865320730000_product_banana.jpeg', 738, 360, 'local', '.jpeg', '2024-03-18 15:01:05', '2024-03-18 15:01:05'),
+(16, 'static/1714970447476256000_chup-anh-chan-dung4.jpg', 1024, 682, 'local', '.jpg', '2024-05-06 11:40:47', '2024-05-06 11:40:47'),
+(17, 'static/1714970542399826000_chup-anh-chan-dung4.jpg', 1024, 682, 'local', '.jpg', '2024-05-06 11:42:22', '2024-05-06 11:42:22'),
+(18, 'static/1714970759315172000_chup-anh-chan-dung4.jpg', 1024, 682, 'local', '.jpg', '2024-05-06 11:45:59', '2024-05-06 11:45:59');
+
+INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `product_name`, `status`, `quantity`, `price`, `created_at`, `updated_at`) VALUES
+(7, 7, 1, 'Beef Burger', 1, 2, 8.00, '2024-04-11 09:50:42', '2024-04-11 09:50:42'),
+(8, 7, 3, 'Seafood Burger', 1, 1, 10.00, '2024-04-11 09:50:42', '2024-04-11 09:50:42'),
+(9, 8, 1, 'Beef Burger', 1, 2, 8.00, '2024-04-11 09:51:58', '2024-04-11 09:51:58'),
+(10, 8, 3, 'Seafood Burger', 1, 1, 10.00, '2024-04-11 09:51:58', '2024-04-11 09:51:58');
+
+INSERT INTO `orders` (`id`, `user_id`, `status`, `tax_fees`, `delivery_fee`, `total`, `coupon_id`, `created_at`, `canceled_at`, `completed_at`, `delivery_at`) VALUES
+(7, 1, 1, 0.00, 0.00, 26.00, 0, '2024-04-11 09:50:42', NULL, NULL, NULL),
+(8, 1, 1, 0.00, 0.00, 26.00, 0, '2024-04-11 09:51:58', NULL, NULL, NULL);
 
 INSERT INTO `products` (`id`, `name`, `image_id`, `taste`, `price`, `category_id`, `discount`, `status`, `description`, `quantity`, `sold`, `featured`, `created_at`, `updated_at`) VALUES
 (1, 'Beef Burger', 5, 'Spicy', 8, 1, 0, 1, 'Description Beef Burger', 100, NULL, 1, '2024-03-07 04:33:13', '2024-03-07 04:33:13'),
@@ -154,7 +179,8 @@ INSERT INTO `products` (`id`, `name`, `image_id`, `taste`, `price`, `category_id
 (11, 'Banana', 15, 'Normal', 12, 4, 5, 1, 'Description Banana', 100, NULL, 2, '2024-03-18 08:01:16', '2024-03-18 08:04:13');
 
 INSERT INTO `users` (`id`, `name`, `user_name`, `password`, `salt`, `phone_number`, `email`, `status`, `address`, `role`, `avatar_id`, `created_at`, `updated_at`) VALUES
-(1, 'USER 1', 'register1', 'e47cc3f5a5d88a7719f6a06408dc37f1', 'JlMOCUofftIAiGnqnGUIpGrEOWHCfmVQKbEOaKdSTlfqraxdCv', '0987654321', 'register1@gmail.com', 1, '0', 1, 0, '2024-03-05 13:53:22', '2024-03-05 13:53:22');
+(1, 'User 1 updated', 'register1', 'e47cc3f5a5d88a7719f6a06408dc37f1', 'JlMOCUofftIAiGnqnGUIpGrEOWHCfmVQKbEOaKdSTlfqraxdCv', '0987654321', 'register1@gmail.com', 1, '123 demo user 11', 1, 18, '2024-03-05 13:53:22', '2024-05-06 04:45:59'),
+(2, 'USER 2', 'register2', '8eb9ce668ac514f363f2edb071ebdda4', 'QIfqXoiQsVsTiPkFvGIwypdFEVFCAytxMnTvoZcwILDpBIJTgr', '0987654311', 'register2@gmail.com', 1, '123 demo demo', 1, 0, '2024-05-02 11:07:53', '2024-05-07 01:47:59');
 
 
 
