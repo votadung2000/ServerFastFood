@@ -59,6 +59,7 @@ type UserCreate struct {
 	Password    string `json:"password" gorm:"column:password;"`
 	Salt        string `json:"-" gorm:"column:salt"`
 	PhoneNumber string `json:"phone_number" gorm:"column:phone_number"`
+	Email       string `json:"email" gorm:"column:email"`
 	Role        int    `json:"role" gorm:"column:role"`
 }
 
@@ -71,6 +72,7 @@ func (i *UserCreate) Validate() error {
 	i.Password = strings.TrimSpace(i.Password)
 	i.Name = strings.TrimSpace(i.Name)
 	i.PhoneNumber = strings.TrimSpace(i.PhoneNumber)
+	i.Email = strings.TrimSpace(i.Email)
 
 	if i.UserName == "" {
 		return ErrValidateRequest(ErrUserNameIsBlank, "ERR_USER_NAME_IS_BLANK")
@@ -90,6 +92,13 @@ func (i *UserCreate) Validate() error {
 
 	if len(i.PhoneNumber) != 10 {
 		return ErrValidateRequest(ErrInvalidPhoneNumberFormat, "ERR_INVALID_PHONE_NUMBER_FORMAT")
+	}
+
+	if i.Email != "" {
+		partsEmail := strings.Split(i.Email, "@")
+		if len(partsEmail) != 2 {
+			return ErrValidateRequest(ErrInvalidEmailFormat, "ERR_INVALID_EMAIL_FORMAT")
+		}
 	}
 
 	return nil
@@ -144,7 +153,7 @@ func (Login) TableName() string {
 }
 
 type UpdatePassword struct {
-	UserName    string `json:"user_name" gorm:"column:user_name"`
+	Email       string `json:"email" gorm:"column:email"`
 	Password    string `json:"password" gorm:"column:password"`
 	NewPassword string `json:"new_password"`
 	Salt        string `json:"-" gorm:"column:salt"`
