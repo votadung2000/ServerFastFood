@@ -12,6 +12,7 @@ import (
 	ginUpload "fastFood/modules/upload/transport/gin"
 	storageUser "fastFood/modules/user/storage"
 	ginUser "fastFood/modules/user/transport/gin"
+	ginVerification "fastFood/modules/verification/transport/gin"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -75,6 +76,11 @@ func Router() {
 		{
 			upload.POST("", ginUpload.CreateImageHdl(db))
 			upload.GET("/:id", ginUpload.FindImageHdl(db))
+		}
+
+		verification := v1.Group("/verification")
+		{
+			verification.POST("", ginVerification.CreateVerificationHdl(db, tokenProvider))
 		}
 	}
 
