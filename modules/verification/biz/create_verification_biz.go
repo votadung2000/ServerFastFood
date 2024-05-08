@@ -80,12 +80,12 @@ func (biz *createVerificationBiz) CreateVerification(ctx context.Context, params
 }
 
 func SendEmail(to, body string) error {
-	smtpUsername := "your_email@example.com"
-	smtpPassword := "your_password"
+	smtpUsername := "developer001104@gmail.com"
+	smtpPassword := "agilejiejwhwizvd"
 	smtpServer := "smtp.example.com"
 	emailSubject := "Password Reset"
 	smtpPort := 587
-	emailFrom := "your_email@example.com"
+	emailFrom := "developer001104@gmail.com"
 
 	auth := smtp.PlainAuth("", smtpUsername, smtpPassword, smtpServer)
 	msg := []byte(fmt.Sprintf("To: %s\r\n"+
