@@ -4,12 +4,14 @@ import (
 	"context"
 	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
+	"fmt"
 
 	"gorm.io/gorm"
 )
 
 func (s *sqlStorage) ListProduct(
 	ctx context.Context,
+	userId int,
 	filter *modelProduct.Filter,
 	paging *common.Paging,
 	moreKeys ...string,
@@ -18,33 +20,38 @@ func (s *sqlStorage) ListProduct(
 
 	db := s.db
 
-	if f := filter; f != nil {
-		fStatus := f.Status
-		if fStatus != 0 {
-			db = db.Where("status = ?", fStatus)
-		} else {
-			db = db.Where("status = ?", modelProduct.STATUS_ACTION)
-		}
+	fmt.Println("userId", userId)
 
-		fName := f.Name
-		if fName != "" {
-			db.Where("name LIKE ?", "%"+fName+"%")
-		}
-
-		fCategoryId := f.CategoryId
-		if fCategoryId != 0 {
-			db = db.Where("category_id = ?", fCategoryId)
-		}
-	}
-
-	if err := db.Select("id").Table(modelProduct.Product{}.TableName()).Count(&paging.Total).Error; err != nil {
+	if err := db.Select("products.*, IF(favorites.id IS NOT NULL, TRUE, FALSE) AS is_favorite").
+		Table(modelProduct.Product{}.TableName()).
+		Joins("LEFT JOIN favorites ON products.id = favorites.product_id AND favorites.user_id = ?", userId).
+		Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 
 	db = db.Preload("Image")
 
+	if f := filter; f != nil {
+		fStatus := f.Status
+		if fStatus != 0 {
+			db = db.Where("products.status = ?", fStatus)
+		} else {
+			db = db.Where("products.status = ?", modelProduct.STATUS_ACTION)
+		}
+
+		fName := f.Name
+		if fName != "" {
+			db = db.Where("name LIKE ?", "%"+fName+"%")
+		}
+
+		fCategoryId := f.CategoryId
+		if fCategoryId != 0 {
+			db = db.Where("products.category_id = ?", fCategoryId)
+		}
+	}
+
 	if err := db.Select("*").
-		Order("id desc").
+		Order("products.id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).Error; err != nil {

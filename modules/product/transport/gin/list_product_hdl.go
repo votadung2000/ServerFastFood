@@ -13,6 +13,8 @@ import (
 
 func ListProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
+
 		var queryString struct {
 			common.Paging
 			modelProduct.Filter
@@ -30,6 +32,7 @@ func ListProductHdl(db *gorm.DB) gin.HandlerFunc {
 
 		data, err := business.ListProduct(
 			ctx.Request.Context(),
+			user.GetUserId(),
 			&queryString.Filter,
 			&queryString.Paging,
 		)

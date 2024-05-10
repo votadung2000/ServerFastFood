@@ -9,6 +9,7 @@ import (
 type ListProductStorage interface {
 	ListProduct(
 		ctx context.Context,
+		userId int,
 		filter *modelProduct.Filter,
 		paging *common.Paging,
 		moreKeys ...string,
@@ -25,10 +26,16 @@ func NewListProductBiz(store ListProductStorage) *listProductBiz {
 
 func (biz *listProductBiz) ListProduct(
 	ctx context.Context,
+	userId int,
 	filter *modelProduct.Filter,
 	paging *common.Paging,
 ) ([]modelProduct.Product, error) {
-	data, err := biz.store.ListProduct(ctx, filter, paging)
+	data, err := biz.store.ListProduct(
+		ctx,
+		userId,
+		filter,
+		paging,
+	)
 
 	if err != nil {
 		return nil, common.ErrCannotListEntity(modelProduct.EntityName, err)

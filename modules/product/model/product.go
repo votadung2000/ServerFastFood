@@ -62,6 +62,7 @@ type Product struct {
 	Quantity    int                  `json:"quantity" gorm:"column:quantity;"`
 	Sold        int                  `json:"sold" gorm:"column:sold;"`
 	Featured    int                  `json:"featured" gorm:"column:featured;"`
+	IsFavorite  bool                 `json:"is_favorite"`
 	ImageId     int                  `json:"-" gorm:"column:image_id;"`
 	Image       *common.PreloadImage `json:"image" gorm:"foreignKey:ImageId"`
 }
