@@ -37,10 +37,13 @@ func (s *sqlStorage) ListCategory(
 
 	db = db.Preload("Image")
 	db = db.Preload("Products", func(dbPros *gorm.DB) *gorm.DB {
+		dbPros = dbPros.
+			Select("products.*, IF(favorites.id IS NOT NULL, TRUE, FALSE) AS is_favorite").
+			Joins("LEFT JOIN favorites ON products.id = favorites.product_id AND favorites.user_id = ?", 1)
 		dbPros = dbPros.Preload("Image")
-		dbPros = dbPros.Where("status = ?", modelProduct.STATUS_ACTION)
-		dbPros = dbPros.Where("featured = ?", modelProduct.FEATURED_OUTSTANDING)
-		return dbPros.Order("id asc")
+		dbPros = dbPros.Where("products.status = ?", modelProduct.STATUS_ACTION)
+		dbPros = dbPros.Where("products.featured = ?", modelProduct.FEATURED_OUTSTANDING)
+		return dbPros.Order("products.id asc")
 	})
 
 	if err := db.Select("*").
