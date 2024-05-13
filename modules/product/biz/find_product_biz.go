@@ -6,20 +6,20 @@ import (
 	modelProduct "fastFood/modules/product/model"
 )
 
-type FindProductStorage interface {
-	FindProduct(ctx context.Context, cond map[string]interface{}) (*modelProduct.Product, error)
+type FindProductWithJoinsStorage interface {
+	FindProductWithJoins(ctx context.Context, productId, userId int) (*modelProduct.Product, error)
 }
 
-type findProductBiz struct {
-	store FindProductStorage
+type findProductWithJoinsBiz struct {
+	store FindProductWithJoinsStorage
 }
 
-func NewFindProductBiz(store FindProductStorage) *findProductBiz {
-	return &findProductBiz{store: store}
+func NewFindProductWithJoinsBiz(store FindProductWithJoinsStorage) *findProductWithJoinsBiz {
+	return &findProductWithJoinsBiz{store: store}
 }
 
-func (biz *findProductBiz) FindProduct(ctx context.Context, id int) (*modelProduct.Product, error) {
-	data, err := biz.store.FindProduct(ctx, map[string]interface{}{"id": id})
+func (biz *findProductWithJoinsBiz) FindProductWithJoins(ctx context.Context, productId, userId int) (*modelProduct.Product, error) {
+	data, err := biz.store.FindProductWithJoins(ctx, productId, userId)
 	if err != nil {
 		return nil, common.ErrCannotGetEntity(modelProduct.EntityName, err)
 	}

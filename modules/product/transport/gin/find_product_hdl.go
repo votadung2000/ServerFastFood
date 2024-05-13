@@ -13,6 +13,8 @@ import (
 
 func FindProductHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
+
 		id, err := strconv.Atoi(ctx.Param("id"))
 
 		if err != nil {
@@ -21,9 +23,9 @@ func FindProductHdl(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		store := storageProduct.NewSQLStorage(db)
-		business := bizProduct.NewFindProductBiz(store)
+		business := bizProduct.NewFindProductWithJoinsBiz(store)
 
-		data, err := business.FindProduct(ctx.Request.Context(), id)
+		data, err := business.FindProductWithJoins(ctx.Request.Context(), id, user.GetUserId())
 
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
