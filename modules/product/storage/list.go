@@ -4,9 +4,6 @@ import (
 	"context"
 	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
-	"fmt"
-
-	"gorm.io/gorm"
 )
 
 func (s *sqlStorage) ListProduct(
@@ -20,16 +17,12 @@ func (s *sqlStorage) ListProduct(
 
 	db := s.db
 
-	fmt.Println("userId", userId)
-
-	if err := db.Select("products.*, IF(favorites.id IS NOT NULL, TRUE, FALSE) AS is_favorite").
+	if err := db.
+		Select("id").
 		Table(modelProduct.Product{}.TableName()).
-		Joins("LEFT JOIN favorites ON products.id = favorites.product_id AND favorites.user_id = ?", userId).
 		Count(&paging.Total).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
-
-	db = db.Preload("Image")
 
 	if f := filter; f != nil {
 		fStatus := f.Status
@@ -50,15 +43,15 @@ func (s *sqlStorage) ListProduct(
 		}
 	}
 
-	if err := db.Select("*").
+	if err := db.
+		Select("products.*, IF(favorites.id IS NOT NULL, TRUE, FALSE) AS is_favorite").
+		Joins("LEFT JOIN favorites ON products.id = favorites.product_id AND favorites.user_id = ?", userId).
+		Preload("Image").
 		Order("products.id desc").
 		Limit(paging.Limit).
 		Offset((paging.Page - 1) * paging.Limit).
-		Find(&result).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			return nil, common.RecordNoFound
-		}
-
+		Find(&result).
+		Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 
