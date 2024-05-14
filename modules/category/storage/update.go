@@ -14,7 +14,7 @@ func (s *sqlStorage) UpdateCategory(
 	dataUpdate *modelCategory.CategoryUpdate,
 ) error {
 	if err := s.db.Where(cond).Updates(dataUpdate).First(dataUpdate).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}
 

@@ -63,6 +63,7 @@ func Router() {
 		favorite := v1.Group("/favorite", middlewareAuth)
 		{
 			favorite.POST("", ginFavorite.CreateFavoriteHdl(db))
+			favorite.POST("/cd_favorite", ginFavorite.CDFavoriteHdl(db))
 			favorite.GET("", ginFavorite.ListFavoriteHdl(db))
 			favorite.DELETE("/:id", ginFavorite.DeleteFavoriteHdl(db))
 		}

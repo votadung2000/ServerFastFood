@@ -4,6 +4,8 @@ import (
 	"context"
 	"fastFood/common"
 	modelProduct "fastFood/modules/product/model"
+
+	"gorm.io/gorm"
 )
 
 func (s *sqlStorage) ListProduct(
@@ -52,6 +54,9 @@ func (s *sqlStorage) ListProduct(
 		Offset((paging.Page - 1) * paging.Limit).
 		Find(&result).
 		Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, common.RecordNoFound
+		}
 		return nil, common.ErrDB(err)
 	}
 

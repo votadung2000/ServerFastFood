@@ -16,7 +16,7 @@ func CreateFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 		var data modelFavorite.FavoriteCreate
 
 		if err := ctx.ShouldBind(&data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
@@ -24,7 +24,7 @@ func CreateFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 		business := bizFavorite.CreateFavoriteBiz(store)
 
 		if err := business.CreateFavorite(ctx.Request.Context(), &data); err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"Message": err.Error()})
+			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}
 

@@ -17,7 +17,7 @@ func (s *sqlStorage) DeleteProduct(
 		Updates(map[string]interface{}{
 			"status": modelProduct.STATUS_DELETED,
 		}).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}
 

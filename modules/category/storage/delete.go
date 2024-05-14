@@ -14,7 +14,7 @@ func (s *sqlStorage) DeleteCategory(ctx context.Context, cond map[string]interfa
 		Updates(map[string]interface{}{
 			"status": modelCategory.STATUS_DELETED,
 		}).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}
 
