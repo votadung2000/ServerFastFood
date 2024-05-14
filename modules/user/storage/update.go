@@ -16,7 +16,7 @@ func (s *sqlStorage) UpdateUser(
 	if err := s.db.Where(cond).
 		Updates(dataUpdate).
 		First(dataUpdate).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}
 

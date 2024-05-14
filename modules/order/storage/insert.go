@@ -10,7 +10,7 @@ import (
 
 func (s *sqlStorage) CreateOrder(ctx context.Context, data *modelOrder.CreateOrder) (int, error) {
 	if err := s.db.Create(data).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return 0, common.RecordNoFound
 		}
 

@@ -12,7 +12,7 @@ func (s *sqlStorage) FindUser(ctx context.Context, cond map[string]interface{}) 
 	var data modelUser.User
 
 	if err := s.db.Preload("Image").Where(cond).First(&data).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return nil, common.RecordNoFound
 		}
 

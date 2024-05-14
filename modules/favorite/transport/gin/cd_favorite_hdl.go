@@ -3,27 +3,27 @@ package ginFavorite
 import (
 	"fastFood/common"
 	bizFavorite "fastFood/modules/favorite/biz"
+	modelFavorite "fastFood/modules/favorite/model"
 	storageFavorite "fastFood/modules/favorite/storage"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
-func DeleteFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
+func CDFavoriteHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		id, err := strconv.Atoi(ctx.Param("id"))
+		var data modelFavorite.FavoriteCreate
 
-		if err != nil {
+		if err := ctx.ShouldBind(&data); err != nil {
 			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
 		}
 
 		store := storageFavorite.NewSQLStorage(db)
-		business := bizFavorite.DeleteFavoriteBiz(store)
+		business := bizFavorite.CDFavoriteBiz(store)
 
-		if err := business.DeleteFavorite(ctx.Request.Context(), id); err != nil {
+		if err := business.CDFavorite(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}

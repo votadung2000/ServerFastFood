@@ -10,7 +10,7 @@ import (
 
 func (s *sqlStorage) CreateProduct(ctx context.Context, data *modelProduct.ProductCreate) error {
 	if err := s.db.Create(data).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}
 

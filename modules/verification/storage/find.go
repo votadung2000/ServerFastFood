@@ -12,7 +12,7 @@ func (s *sqlStorage) FindVerification(ctx context.Context, cond map[string]inter
 	var data modelVerification.Verification
 
 	if err := s.db.Where(cond).First(&data).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
+		if err == gorm.ErrRecordNotFound {
 			return nil, common.RecordNoFound
 		}
 
