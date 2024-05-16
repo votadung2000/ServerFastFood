@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"errors"
+	modelOrderItem "fastFood/modules/order_item/model"
 	"fmt"
 	"time"
 )
@@ -27,17 +28,18 @@ var (
 )
 
 type Order struct {
-	Id          int        `json:"id" gorm:"column:id;"`
-	UserId      int        `json:"user_id" gorm:"column:user_id;"`
-	Status      int        `json:"status" gorm:"column:status;"`
-	TaxFees     float64    `json:"tax_fees" gorm:"column:tax_fees;"`
-	DeliveryFee float64    `json:"delivery_fee" gorm:"column:delivery_fee;"`
-	Total       float64    `json:"total" gorm:"column:total;"`
-	CouponId    int        `json:"coupon_id" gorm:"column:coupon_id;"`
-	CreatedAt   *time.Time `json:"created_at" gorm:"column:created_at;"`
-	CanceledAt  *time.Time `json:"canceled_at" gorm:"column:canceled_at;"`
-	CompletedAt *time.Time `json:"completed_at" gorm:"column:completed_at;"`
-	DeliveryAt  *time.Time `json:"delivery_at" gorm:"column:delivery_at;"`
+	Id          int                         `json:"id" gorm:"column:id;"`
+	UserId      int                         `json:"user_id" gorm:"column:user_id;"`
+	Status      int                         `json:"status" gorm:"column:status;"`
+	TaxFees     float64                     `json:"tax_fees" gorm:"column:tax_fees;"`
+	DeliveryFee float64                     `json:"delivery_fee" gorm:"column:delivery_fee;"`
+	Total       float64                     `json:"total" gorm:"column:total;"`
+	CouponId    int                         `json:"coupon_id" gorm:"column:coupon_id;"`
+	CreatedAt   *time.Time                  `json:"created_at" gorm:"column:created_at;"`
+	CanceledAt  *time.Time                  `json:"canceled_at" gorm:"column:canceled_at;"`
+	CompletedAt *time.Time                  `json:"completed_at" gorm:"column:completed_at;"`
+	DeliveryAt  *time.Time                  `json:"delivery_at" gorm:"column:delivery_at;"`
+	OrderItems  []*modelOrderItem.OrderItem `json:"order_item" gorm:"foreignKey:OrderId;"`
 }
 
 func (Order) TableName() string {

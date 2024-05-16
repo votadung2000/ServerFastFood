@@ -71,6 +71,7 @@ func Router() {
 		order := v1.Group("/order", middlewareAuth)
 		{
 			order.POST("", ginOrder.CreateOrderHdl(db))
+			order.GET("", ginOrder.ListOrderHdl(db))
 		}
 
 		upload := v1.Group("/upload", middlewareAuth)
