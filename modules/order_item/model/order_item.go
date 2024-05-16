@@ -1,7 +1,12 @@
 package modelOrderItem
 
 import (
+	"database/sql/driver"
+	"encoding/json"
+	"errors"
 	"fastFood/common"
+	modelProduct "fastFood/modules/product/model"
+	"fmt"
 	"strings"
 )
 
@@ -24,12 +29,13 @@ var (
 
 type OrderItem struct {
 	common.SQLModel
-	OrderId     int     `json:"order_id" gorm:"column:order_id;"`
-	ProductId   int     `json:"product_id" gorm:"column:product_id;"`
-	ProductName string  `json:"product_name" gorm:"column:product_name;"`
-	Status      int     `json:"status" gorm:"column:status;"`
-	Quantity    int     `json:"quantity" gorm:"column:quantity;"`
-	Price       float64 `json:"price" gorm:"column:price;"`
+	OrderId     int                          `json:"-" gorm:"column:order_id;"`
+	ProductId   int                          `json:"-" gorm:"column:product_id;"`
+	ProductName string                       `json:"-" gorm:"column:product_name;"`
+	Status      int                          `json:"status" gorm:"column:status;"`
+	Quantity    int                          `json:"quantity" gorm:"column:quantity;"`
+	Price       float64                      `json:"price" gorm:"column:price;"`
+	Product     *modelProduct.PreloadProduct `json:"product" gorm:"foreignKey:ProductId;"`
 }
 
 func (OrderItem) TableName() string {
@@ -72,4 +78,30 @@ func (o *CreateOrderItem) Validate() error {
 	}
 
 	return nil
+}
+
+// get interface of DB ->
+func (o *OrderItem) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
+	}
+
+	var orderItem OrderItem
+	if err := json.Unmarshal(bytes, &orderItem); err != nil {
+		return err
+	}
+
+	*o = orderItem
+
+	return nil
+}
+
+// struct -> DB
+func (o *OrderItem) Value() (driver.Value, error) {
+	if o == nil {
+		return nil, nil
+	}
+
+	return json.Marshal(o)
 }
