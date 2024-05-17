@@ -19,9 +19,27 @@ func (s *sqlStorage) ListOrder(
 	db := s.db
 
 	if f := filter; f != nil {
+		fUpcoming := f.IsUpcoming
+		fHistory := f.IsHistory
 		fStatus := f.Status
-		if fStatus != 0 {
-			db = db.Where("status = ?", fStatus)
+
+		if fUpcoming && !(fStatus != 0) && !fHistory {
+			statuses := []int{
+				modelOrder.STATUS_WAITING,
+				modelOrder.STATUS_PROCESSED,
+				modelOrder.STATUS_DELIVERING,
+				modelOrder.STATUS_DELIVERED,
+			}
+			db = db.Where("status IN ?", statuses)
+		}
+
+		if fHistory && !(fStatus != 0) && !fUpcoming {
+			statuses := []int{modelOrder.STATUS_COMPLETED, modelOrder.STATUS_CANCELED}
+			db = db.Where("status IN ?", statuses)
+		}
+
+		if fStatus != 0 && !fUpcoming && !fHistory {
+			db = db.Where("status IN ?", fStatus)
 		}
 	}
 
