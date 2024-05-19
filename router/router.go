@@ -72,6 +72,7 @@ func Router() {
 		{
 			order.POST("", ginOrder.CreateOrderHdl(db))
 			order.GET("", ginOrder.ListOrderHdl(db))
+			order.PATCH("/:id", ginOrder.UpdateOrderHdl(db))
 		}
 
 		upload := v1.Group("/upload", middlewareAuth)
