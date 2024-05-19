@@ -47,12 +47,12 @@ func (Order) TableName() string {
 }
 
 type OrderParams struct {
-	UserId      int                   `json:"user_id" gorm:"column:user_id;"`
-	TaxFees     float64               `json:"tax_fees" gorm:"column:tax_fees;"`
-	DeliveryFee float64               `json:"delivery_fee" gorm:"column:delivery_fee;"`
-	Total       float64               `json:"total" gorm:"column:total;"`
-	CouponId    int                   `json:"coupon_id" gorm:"column:coupon_id;"`
-	Products    MultipleProductParams `json:"products"`
+	UserId      int      `json:"user_id" gorm:"column:user_id;"`
+	TaxFees     float64  `json:"tax_fees" gorm:"column:tax_fees;"`
+	DeliveryFee float64  `json:"delivery_fee" gorm:"column:delivery_fee;"`
+	Total       float64  `json:"total" gorm:"column:total;"`
+	CouponId    int      `json:"coupon_id" gorm:"column:coupon_id;"`
+	Products    Products `json:"products"`
 }
 
 type CreateOrder struct {
@@ -79,6 +79,14 @@ func (o *CreateOrder) Validate() error {
 	return nil
 }
 
+type UpdateOrder struct {
+	Status *int `json:"status" gorm:"column:status;"`
+}
+
+func (UpdateOrder) TableName() string {
+	return Order{}.TableName()
+}
+
 type ProductParams struct {
 	Id       int     `json:"id"`
 	Name     string  `json:"name"`
@@ -86,30 +94,30 @@ type ProductParams struct {
 	Price    float32 `json:"price"`
 }
 
-type MultipleProductParams []ProductParams
+type Products []ProductParams
 
 // get interface of DB ->
-func (i *MultipleProductParams) Scan(value interface{}) error {
+func (p *Products) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal JSONB value:", value))
 	}
 
-	var product MultipleProductParams
+	var product Products
 	if err := json.Unmarshal(bytes, &product); err != nil {
 		return err
 	}
 
-	*i = product
+	*p = product
 
 	return nil
 }
 
 // struct -> DB
-func (i *MultipleProductParams) Value() (driver.Value, error) {
-	if i == nil {
+func (p *Products) Value() (driver.Value, error) {
+	if p == nil {
 		return nil, nil
 	}
 
-	return json.Marshal(i)
+	return json.Marshal(p)
 }
