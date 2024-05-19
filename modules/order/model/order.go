@@ -80,7 +80,8 @@ func (o *CreateOrder) Validate() error {
 }
 
 type UpdateOrder struct {
-	Status *int `json:"status" gorm:"column:status;"`
+	Status     int       `json:"status" gorm:"column:status;"`
+	CanceledAt time.Time `json:"-" gorm:"column:canceled_at;"`
 }
 
 func (UpdateOrder) TableName() string {

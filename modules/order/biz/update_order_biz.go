@@ -3,6 +3,7 @@ package bizOrder
 import (
 	"context"
 	modelOrder "fastFood/modules/order/model"
+	"time"
 )
 
 type UpdateOrderStorage interface {
@@ -37,8 +38,12 @@ func (biz *updateOrderBiz) UpdateOrder(
 		return err
 	}
 
-	if order.Status != 0 && data.Status == intToPtr(modelOrder.STATUS_CANCELED) {
+	if order.Status != 0 && order.Status == modelOrder.STATUS_CANCELED {
 		return modelOrder.ErrOrderHasBeenCanceled()
+	}
+
+	if data.Status == modelOrder.STATUS_CANCELED {
+		data.CanceledAt = time.Now()
 	}
 
 	if err := biz.store.UpdateOrder(ctx, map[string]interface{}{"id": id}, data); err != nil {
@@ -46,8 +51,4 @@ func (biz *updateOrderBiz) UpdateOrder(
 	}
 
 	return nil
-}
-
-func intToPtr(i int) *int {
-	return &i
 }
