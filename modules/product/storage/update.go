@@ -25,3 +25,17 @@ func (s *sqlStorage) UpdateProduct(
 
 	return nil
 }
+
+func (s *sqlStorage) IncreaseProductSold(ctx context.Context, id, quantity int) error {
+	if err := s.db.Table(modelProduct.Product{}.TableName()).
+		Where("id = ?", id).
+		Update("sold", gorm.Expr("sold + ?", quantity)).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return common.RecordNoFound
+		}
+
+		return common.ErrDB(err)
+	}
+
+	return nil
+}

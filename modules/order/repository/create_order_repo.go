@@ -3,8 +3,10 @@ package repoOrder
 import (
 	"context"
 	"fastFood/common"
+	asyncJob "fastFood/common/async_job"
 	modelOrder "fastFood/modules/order/model"
 	modelOrderItem "fastFood/modules/order_item/model"
+	"log"
 )
 
 type CreateOrderStorage interface {
@@ -15,18 +17,25 @@ type CreateOrderItemStorage interface {
 	CreateOrderItem(ctx context.Context, data *[]modelOrderItem.CreateOrderItem) error
 }
 
+type IncreaseProductStorage interface {
+	IncreaseProductSold(ctx context.Context, id, quantity int) error
+}
+
 type createOrderRepo struct {
 	storeOrder     CreateOrderStorage
 	storeOrderItem CreateOrderItemStorage
+	storeProduct   IncreaseProductStorage
 }
 
 func NewCreateOrderRepo(
 	storeOrder CreateOrderStorage,
 	storeOrderItem CreateOrderItemStorage,
+	storeProduct IncreaseProductStorage,
 ) *createOrderRepo {
 	return &createOrderRepo{
 		storeOrder:     storeOrder,
 		storeOrderItem: storeOrderItem,
+		storeProduct:   storeProduct,
 	}
 }
 
@@ -67,6 +76,19 @@ func (repo *createOrderRepo) CreateOrder(ctx context.Context, data *modelOrder.O
 
 	if err := repo.storeOrderItem.CreateOrderItem(ctx, &orderItems); err != nil {
 		return common.ErrCannotCreateEntity(modelOrderItem.EntityName, err)
+	}
+
+	for _, v := range data.Products {
+		job := asyncJob.NewJob(func(ctx context.Context) error {
+			if err := repo.storeProduct.IncreaseProductSold(ctx, v.Id, v.Quantity); err != nil {
+				return err
+			}
+			return nil
+		})
+
+		if err := asyncJob.NewGroup(true, job).Run(ctx); err != nil {
+			log.Println(err)
+		}
 	}
 
 	return nil

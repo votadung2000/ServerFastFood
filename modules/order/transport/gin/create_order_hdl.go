@@ -6,6 +6,7 @@ import (
 	repoOrder "fastFood/modules/order/repository"
 	storageOrder "fastFood/modules/order/storage"
 	storageOrderItem "fastFood/modules/order_item/storage"
+	storageProduct "fastFood/modules/product/storage"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -23,8 +24,9 @@ func CreateOrderHdl(db *gorm.DB) gin.HandlerFunc {
 
 		storeOrder := storageOrder.NewSQLStorage(db)
 		storeOrderItem := storageOrderItem.NewSQLStorage(db)
+		storeProduct := storageProduct.NewSQLStorage(db)
 
-		repo := repoOrder.NewCreateOrderRepo(storeOrder, storeOrderItem)
+		repo := repoOrder.NewCreateOrderRepo(storeOrder, storeOrderItem, storeProduct)
 
 		if err := repo.CreateOrder(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
