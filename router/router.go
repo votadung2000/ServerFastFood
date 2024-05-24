@@ -6,6 +6,7 @@ import (
 	"fastFood/database"
 	"fastFood/middleware"
 	ginCategory "fastFood/modules/category/transport/gin"
+	ginDeliveryAddress "fastFood/modules/delivery_address/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
 	ginOrder "fastFood/modules/order/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
@@ -49,6 +50,11 @@ func Router() {
 			category.GET("/:id", ginCategory.FindCategoryHdl(db))
 			category.PATCH("/:id", ginCategory.UpdateCategoryHdl(db))
 			category.DELETE("/:id", ginCategory.DeleteCategoryHdl(db))
+		}
+
+		deliveryAddress := v1.Group("/delivery_address", middlewareAuth)
+		{
+			deliveryAddress.POST("", ginDeliveryAddress.CreateDeliveryAddressHdl(db))
 		}
 
 		product := v1.Group("/product", middlewareAuth)
