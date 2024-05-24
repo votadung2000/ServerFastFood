@@ -5,6 +5,10 @@ import "fastFood/common"
 const (
 	STATUS_ACTION  = 1
 	STATUS_DELETED = -2
+
+	TYPE_HOME   = 1
+	TYPE_OFFICE = 2
+	TYPE_OTHER  = 3
 )
 
 var (
@@ -20,6 +24,7 @@ type DeliveryAddress struct {
 	common.SQLModel
 	UserId        int    `json:"user_id" gorm:"column:user_id;"`
 	Status        int    `json:"status" gorm:"column:status;"`
+	Type          int    `json:"type" gorm:"column:type;"`
 	RecipientName string `json:"recipient_name" gorm:"column:recipient_name;"`
 	StreetAddress string `json:"street_address" gorm:"column:street_address;"`
 	Country       string `json:"country" gorm:"column:country;"`
@@ -36,6 +41,7 @@ type CreateDeliveryAddress struct {
 	UserId        int    `json:"user_id" gorm:"column:user_id;"`
 	RecipientName string `json:"recipient_name" gorm:"column:recipient_name;"`
 	StreetAddress string `json:"street_address" gorm:"column:street_address;"`
+	Type          int    `json:"type" gorm:"column:type;"`
 	Country       string `json:"country" gorm:"column:country;"`
 	City          string `json:"city" gorm:"column:city;"`
 	PostalCode    string `json:"postal_code" gorm:"column:postal_code;"`
