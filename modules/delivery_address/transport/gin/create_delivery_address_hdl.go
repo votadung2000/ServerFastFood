@@ -21,7 +21,7 @@ func CreateDeliveryAddressHdl(db *gorm.DB) gin.HandlerFunc {
 		}
 
 		store := storageDeliveryAddress.NewSQLStorage(db)
-		business := bizDeliveryAddress.CreateDeliveryAddressBiz(store)
+		business := bizDeliveryAddress.NewCreateDeliveryAddressBiz(store)
 
 		if err := business.CreateDeliveryAddress(ctx.Request.Context(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)

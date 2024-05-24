@@ -35,7 +35,10 @@ func (s *sqlStorage) ListCategory(
 		return nil, common.ErrDB(err)
 	}
 
-	db = db.Preload("Image")
+	for i := range moreKeys {
+		db = db.Preload(moreKeys[i])
+	}
+
 	db = db.Preload("Products", func(dbPros *gorm.DB) *gorm.DB {
 		dbPros = dbPros.
 			Select("products.*, IF(favorites.id IS NOT NULL, TRUE, FALSE) AS is_favorite").

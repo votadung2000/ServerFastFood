@@ -13,7 +13,7 @@ type createDeliveryAddressBiz struct {
 	store CreateDeliveryAddressStorage
 }
 
-func CreateDeliveryAddressBiz(store CreateDeliveryAddressStorage) *createDeliveryAddressBiz {
+func NewCreateDeliveryAddressBiz(store CreateDeliveryAddressStorage) *createDeliveryAddressBiz {
 	return &createDeliveryAddressBiz{store: store}
 }
 

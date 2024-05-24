@@ -28,7 +28,7 @@ func (biz *listCategoryBiz) ListCategory(
 	filter *modelCategory.Filter,
 	paging *common.Paging,
 ) ([]modelCategory.Category, error) {
-	data, err := biz.store.ListCategory(ctx, filter, paging)
+	data, err := biz.store.ListCategory(ctx, filter, paging, "Image")
 	if err != nil {
 		return nil, err
 	}
