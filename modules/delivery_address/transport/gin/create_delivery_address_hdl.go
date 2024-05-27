@@ -13,6 +13,8 @@ import (
 
 func CreateDeliveryAddressHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
+
 		var data modelDeliveryAddress.CreateDeliveryAddress
 
 		if err := ctx.ShouldBind(&data); err != nil {
@@ -23,7 +25,7 @@ func CreateDeliveryAddressHdl(db *gorm.DB) gin.HandlerFunc {
 		store := storageDeliveryAddress.NewSQLStorage(db)
 		business := bizDeliveryAddress.NewCreateDeliveryAddressBiz(store)
 
-		if err := business.CreateDeliveryAddress(ctx.Request.Context(), &data); err != nil {
+		if err := business.CreateDeliveryAddress(ctx.Request.Context(), user.GetUserId(), &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}

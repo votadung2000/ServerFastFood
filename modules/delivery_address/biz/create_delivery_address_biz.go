@@ -17,7 +17,13 @@ func NewCreateDeliveryAddressBiz(store CreateDeliveryAddressStorage) *createDeli
 	return &createDeliveryAddressBiz{store: store}
 }
 
-func (biz *createDeliveryAddressBiz) CreateDeliveryAddress(ctx context.Context, data *modelDeliveryAddress.CreateDeliveryAddress) error {
+func (biz *createDeliveryAddressBiz) CreateDeliveryAddress(
+	ctx context.Context,
+	id int,
+	data *modelDeliveryAddress.CreateDeliveryAddress,
+) error {
+	data.SetUserId(id)
+
 	if err := data.Validate(); err != nil {
 		return err
 	}
