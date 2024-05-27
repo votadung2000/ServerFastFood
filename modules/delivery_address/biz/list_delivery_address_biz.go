@@ -30,7 +30,7 @@ func (biz *listDeliveryAddress) ListDeliveryAddress(
 	paging *common.Paging,
 	id int,
 ) ([]modelDeliveryAddress.DeliveryAddress, error) {
-	data, err := biz.store.ListDeliveryAddress(ctx, filter, paging, map[string]interface{}{"id": id})
+	data, err := biz.store.ListDeliveryAddress(ctx, filter, paging, map[string]interface{}{"user_id": id})
 	if err != nil {
 		return nil, err
 	}

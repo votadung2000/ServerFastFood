@@ -9,6 +9,9 @@ const (
 	TYPE_HOME   = 1
 	TYPE_OFFICE = 2
 	TYPE_OTHER  = 3
+
+	DEFAULT     = 1
+	NOT_DEFAULT = -1
 )
 
 var (
@@ -23,16 +26,19 @@ var (
 
 type DeliveryAddress struct {
 	common.SQLModel
-	UserId        int    `json:"user_id" gorm:"column:user_id;"`
-	Status        int    `json:"status" gorm:"column:status;"`
-	Type          int    `json:"type" gorm:"column:type;"`
-	RecipientName string `json:"recipient_name" gorm:"column:recipient_name;"`
-	PhoneNumber   string `json:"phone_number" gorm:"column:phone_number"`
-	StreetAddress string `json:"street_address" gorm:"column:street_address;"`
-	Country       string `json:"country" gorm:"column:country;"`
-	City          string `json:"city" gorm:"column:city;"`
-	PostalCode    string `json:"postal_code" gorm:"column:postal_code;"`
-	Description   string `json:"description" gorm:"column:description;"`
+	UserId        int     `json:"user_id" gorm:"column:user_id;"`
+	Status        int     `json:"status" gorm:"column:status;"`
+	Type          int     `json:"type" gorm:"column:type;"`
+	Default       int     `json:"default" gorm:"column:default;"`
+	RecipientName string  `json:"recipient_name" gorm:"column:recipient_name;"`
+	PhoneNumber   string  `json:"phone_number" gorm:"column:phone_number"`
+	StreetAddress string  `json:"street_address" gorm:"column:street_address;"`
+	Country       string  `json:"country" gorm:"column:country;"`
+	City          string  `json:"city" gorm:"column:city;"`
+	PostalCode    string  `json:"postal_code" gorm:"column:postal_code;"`
+	Description   string  `json:"description" gorm:"column:description;"`
+	Lat           float32 `json:"lat" gorm:"column:lat;"`
+	Lon           float32 `json:"lon" gorm:"column:lon;"`
 }
 
 func (DeliveryAddress) TableName() string {
@@ -40,19 +46,26 @@ func (DeliveryAddress) TableName() string {
 }
 
 type CreateDeliveryAddress struct {
-	UserId        int    `json:"user_id" gorm:"column:user_id;"`
-	RecipientName string `json:"recipient_name" gorm:"column:recipient_name;"`
-	PhoneNumber   string `json:"phone_number" gorm:"column:phone_number"`
-	StreetAddress string `json:"street_address" gorm:"column:street_address;"`
-	Type          int    `json:"type" gorm:"column:type;"`
-	Country       string `json:"country" gorm:"column:country;"`
-	City          string `json:"city" gorm:"column:city;"`
-	PostalCode    string `json:"postal_code" gorm:"column:postal_code;"`
-	Description   string `json:"description" gorm:"column:description;"`
+	UserId        int     `json:"user_id" gorm:"column:user_id;"`
+	RecipientName string  `json:"recipient_name" gorm:"column:recipient_name;"`
+	PhoneNumber   string  `json:"phone_number" gorm:"column:phone_number"`
+	StreetAddress string  `json:"street_address" gorm:"column:street_address;"`
+	Type          int     `json:"type" gorm:"column:type;"`
+	Default       int     `json:"default" gorm:"column:default;"`
+	Country       string  `json:"country" gorm:"column:country;"`
+	City          string  `json:"city" gorm:"column:city;"`
+	PostalCode    string  `json:"postal_code" gorm:"column:postal_code;"`
+	Description   string  `json:"description" gorm:"column:description;"`
+	Lat           float32 `json:"lat" gorm:"column:lat;"`
+	Lon           float32 `json:"lon" gorm:"column:lon;"`
 }
 
 func (CreateDeliveryAddress) TableName() string {
 	return DeliveryAddress{}.TableName()
+}
+
+func (c *CreateDeliveryAddress) SetUserId(id int) {
+	c.UserId = id
 }
 
 func (c *CreateDeliveryAddress) Validate() error {
