@@ -15,7 +15,7 @@ const (
 )
 
 const (
-	EntityName = "Delivery Address"
+	EntityName = "Address"
 )
 
 var (
