@@ -3,6 +3,7 @@ package bizCategory
 import (
 	"context"
 
+	"fastFood/common"
 	modelCategory "fastFood/modules/category/model"
 )
 
@@ -21,7 +22,7 @@ func NewFindCategoryBiz(store FindCategoryStorage) *findCategoryBiz {
 func (biz *findCategoryBiz) FindCategory(ctx context.Context, id int) (*modelCategory.Category, error) {
 	data, err := biz.store.FindCategory(ctx, map[string]interface{}{"id": id})
 	if err != nil {
-		return nil, err
+		return nil, common.ErrCannotGetEntity(modelCategory.EntityName, err)
 	}
 
 	return data, nil

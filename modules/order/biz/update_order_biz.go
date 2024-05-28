@@ -2,6 +2,7 @@ package bizOrder
 
 import (
 	"context"
+	"fastFood/common"
 	modelOrder "fastFood/modules/order/model"
 	"time"
 )
@@ -35,7 +36,7 @@ func (biz *updateOrderBiz) UpdateOrder(
 	order, err := biz.store.FindOrder(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
-		return err
+		return common.ErrCannotGetEntity(modelOrder.EntityName, err)
 	}
 
 	if order.Status != 0 && order.Status == modelOrder.STATUS_CANCELED {
