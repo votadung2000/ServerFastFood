@@ -12,6 +12,10 @@ const (
 	STATUS_DELETED = -2
 )
 
+const (
+	EntityName = "Category"
+)
+
 var (
 	ErrBlocked     = "the category has been blocked"
 	ErrNameIsBlank = "the name category cannot be blank"

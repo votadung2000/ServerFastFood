@@ -2,6 +2,7 @@ package bizDeliveryAddress
 
 import (
 	"context"
+	"fastFood/common"
 	modelDeliveryAddress "fastFood/modules/delivery_address/model"
 )
 
@@ -30,7 +31,7 @@ func (biz *updateDeliveryAddressBiz) UpdateDeliveryAddress(
 	address, err := biz.store.FindDeliveryAddress(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {
-		return err
+		return common.ErrCannotGetEntity(modelDeliveryAddress.EntityName, err)
 	}
 
 	if address == nil {

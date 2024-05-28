@@ -2,6 +2,7 @@ package bizCategory
 
 import (
 	"context"
+	"fastFood/common"
 	modelCategory "fastFood/modules/category/model"
 )
 
@@ -21,7 +22,7 @@ func NewDeleteCategoryBiz(store DeleteCategoryStorage) *deleteCategoryBiz {
 func (biz *deleteCategoryBiz) DeleteCategory(ctx context.Context, id int) error {
 	data, err := biz.store.FindCategory(ctx, map[string]interface{}{"id": id})
 	if err != nil {
-		return err
+		return common.ErrCannotGetEntity(modelCategory.EntityName, err)
 	}
 
 	if data.Status != 0 && data.Status == modelCategory.STATUS_DELETED {

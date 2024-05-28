@@ -58,6 +58,7 @@ func Router() {
 			deliveryAddress.GET("", ginDeliveryAddress.ListDeliveryAddress(db))
 			deliveryAddress.GET("/:id", ginDeliveryAddress.FindDeliveryAddressHdl(db))
 			deliveryAddress.PATCH("/:id", ginDeliveryAddress.UpdateDeliveryAddressHdl(db))
+			deliveryAddress.DELETE("/:id", ginDeliveryAddress.DeleteDeliveryAddressHdl(db))
 		}
 
 		product := v1.Group("/product", middlewareAuth)

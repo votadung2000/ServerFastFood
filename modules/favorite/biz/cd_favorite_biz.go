@@ -2,6 +2,7 @@ package bizFavorite
 
 import (
 	"context"
+	"fastFood/common"
 	modelFavorite "fastFood/modules/favorite/model"
 )
 
@@ -27,7 +28,7 @@ func (biz *cdFavoriteBiz) CDFavorite(ctx context.Context, data *modelFavorite.Fa
 	favorite, err := biz.store.FindFavorite(ctx, map[string]interface{}{"product_id": data.ProductId, "user_id": data.UserId})
 
 	if err != nil {
-		return err
+		return common.ErrCannotGetEntity(modelFavorite.EntityName, err)
 	}
 
 	if favorite == nil {

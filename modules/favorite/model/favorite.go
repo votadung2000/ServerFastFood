@@ -11,6 +11,10 @@ const (
 	STATUS_DELETED = -2
 )
 
+const (
+	EntityName = "Favorite"
+)
+
 var (
 	ErrUserIsBlank      = errors.New("the user cannot be blank")
 	ErrProductIsBlank   = errors.New("the product cannot be blank")
