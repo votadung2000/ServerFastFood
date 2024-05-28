@@ -13,6 +13,8 @@ import (
 
 func ListOrderHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
+
 		var paging common.Paging
 
 		if err := ctx.ShouldBind(&paging); err != nil {
@@ -32,7 +34,7 @@ func ListOrderHdl(db *gorm.DB) gin.HandlerFunc {
 		store := storageOrder.NewSQLStorage(db)
 		business := bizOrder.NewListOrderBiz(store)
 
-		data, err := business.ListOrder(ctx.Request.Context(), &filter, &paging)
+		data, err := business.ListOrder(ctx.Request.Context(), &filter, &paging, user.GetUserId())
 
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, err)

@@ -11,6 +11,7 @@ type ListOrderStorage interface {
 		ctx context.Context,
 		filter *modelOrder.Filter,
 		paging *common.Paging,
+		cond map[string]interface{},
 		moreKeys ...string,
 	) ([]modelOrder.Order, error)
 }
@@ -27,8 +28,9 @@ func (biz *listOrderBiz) ListOrder(
 	ctx context.Context,
 	filter *modelOrder.Filter,
 	paging *common.Paging,
+	userId int,
 ) ([]modelOrder.Order, error) {
-	data, err := biz.store.ListOrder(ctx, filter, paging)
+	data, err := biz.store.ListOrder(ctx, filter, paging, map[string]interface{}{"user_id": userId})
 	if err != nil {
 		return nil, err
 	}
