@@ -14,6 +14,10 @@ const (
 	NOT_DEFAULT = -1
 )
 
+const (
+	EntityName = "Delivery Address"
+)
+
 var (
 	ErrUserIdIsBlank        = "the user id cannot be blank"
 	ErrRecipientNameIsBlank = "the recipient name cannot be blank"

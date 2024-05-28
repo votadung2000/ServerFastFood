@@ -56,6 +56,7 @@ func Router() {
 		{
 			deliveryAddress.POST("", ginDeliveryAddress.CreateDeliveryAddressHdl(db))
 			deliveryAddress.GET("", ginDeliveryAddress.ListDeliveryAddress(db))
+			deliveryAddress.GET("/:id", ginDeliveryAddress.FindDeliveryAddressHdl(db))
 		}
 
 		product := v1.Group("/product", middlewareAuth)
