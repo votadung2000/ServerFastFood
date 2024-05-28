@@ -80,6 +80,7 @@ func Router() {
 		{
 			order.POST("", ginOrder.CreateOrderHdl(db))
 			order.GET("", ginOrder.ListOrderHdl(db))
+			order.GET("/:id", ginOrder.FindOrderHdl(db))
 			order.PATCH("/:id", ginOrder.UpdateOrderHdl(db))
 		}
 

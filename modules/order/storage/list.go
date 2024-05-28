@@ -12,11 +12,12 @@ func (s *sqlStorage) ListOrder(
 	ctx context.Context,
 	filter *modelOrder.Filter,
 	paging *common.Paging,
+	cond map[string]interface{},
 	moreKeys ...string,
 ) ([]modelOrder.Order, error) {
 	var result []modelOrder.Order
 
-	db := s.db
+	db := s.db.Where(cond)
 
 	if f := filter; f != nil {
 		fUpcoming := f.IsUpcoming

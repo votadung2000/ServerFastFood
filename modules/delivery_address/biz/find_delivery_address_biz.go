@@ -18,8 +18,8 @@ func NewFindDeliveryAddressBiz(store FindDeliveryAddressStorage) *findDeliveryAd
 	return &findDeliveryAddressBiz{store: store}
 }
 
-func (biz *findDeliveryAddressBiz) FindDeliveryAddress(ctx context.Context, idDeliveryAddress, userId int) (*modelDeliveryAddress.DeliveryAddress, error) {
-	data, err := biz.store.FindDeliveryAddress(ctx, map[string]interface{}{"id": idDeliveryAddress, "user_id": userId})
+func (biz *findDeliveryAddressBiz) FindDeliveryAddress(ctx context.Context, deliveryAddressId, userId int) (*modelDeliveryAddress.DeliveryAddress, error) {
+	data, err := biz.store.FindDeliveryAddress(ctx, map[string]interface{}{"id": deliveryAddressId, "user_id": userId})
 	if err != nil {
 		return nil, common.ErrCannotGetEntity(modelDeliveryAddress.EntityName, err)
 	}
