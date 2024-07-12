@@ -6,7 +6,7 @@ import (
 )
 
 type CreateDeliveryAddressStorage interface {
-	CreateDeliveryAddress(ctx context.Context, data *modelDeliveryAddress.CreateDeliveryAddress) error
+	CreateDeliveryAddress(ctx context.Context, id int, data *modelDeliveryAddress.CreateDeliveryAddress) error
 }
 
 type createDeliveryAddressBiz struct {
@@ -28,7 +28,7 @@ func (biz *createDeliveryAddressBiz) CreateDeliveryAddress(
 		return err
 	}
 
-	if err := biz.store.CreateDeliveryAddress(ctx, data); err != nil {
+	if err := biz.store.CreateDeliveryAddress(ctx, id, data); err != nil {
 		return err
 	}
 
