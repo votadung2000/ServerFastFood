@@ -56,6 +56,7 @@ func Router() {
 		{
 			deliveryAddress.POST("", ginDeliveryAddress.CreateDeliveryAddressHdl(db))
 			deliveryAddress.GET("", ginDeliveryAddress.ListDeliveryAddress(db))
+			deliveryAddress.GET("/default", ginDeliveryAddress.FindDeliveryAddressDefaultHdl(db))
 			deliveryAddress.GET("/:id", ginDeliveryAddress.FindDeliveryAddressHdl(db))
 			deliveryAddress.PATCH("/:id", ginDeliveryAddress.UpdateDeliveryAddressHdl(db))
 			deliveryAddress.DELETE("/:id", ginDeliveryAddress.DeleteDeliveryAddressHdl(db))
