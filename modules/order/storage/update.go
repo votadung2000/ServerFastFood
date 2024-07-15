@@ -13,7 +13,7 @@ func (s *sqlStorage) UpdateOrder(
 	cond map[string]interface{},
 	dataUpdate *modelOrder.UpdateOrder,
 ) error {
-	if err := s.db.Where(cond).Updates(dataUpdate).First(dataUpdate).Error; err != nil {
+	if err := s.db.Where(cond).Updates(dataUpdate).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}

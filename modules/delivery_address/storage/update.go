@@ -13,13 +13,31 @@ func (s *sqlStorage) UpdateCategory(
 	cond map[string]interface{},
 	dataUpdate *modelDeliveryAddress.DeliveryAddressUpdate,
 ) error {
-	if err := s.db.Where(cond).Updates(dataUpdate).First(dataUpdate).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return common.RecordNoFound
+	return s.db.Transaction(func(tx *gorm.DB) error {
+		if *dataUpdate.Default == modelDeliveryAddress.DEFAULT {
+			if userId, ok := cond["user_id"]; ok {
+				if err := tx.Table(modelDeliveryAddress.DeliveryAddress{}.TableName()).
+					Where("user_id = ? and `default` = ?", userId, modelDeliveryAddress.DEFAULT).
+					Update("`default`", modelDeliveryAddress.NOT_DEFAULT).Error; err != nil {
+					if err == gorm.ErrRecordNotFound {
+						return common.RecordNoFound
+					}
+
+					return common.ErrDB(err)
+				}
+			}
 		}
 
-		return common.ErrDB(err)
-	}
+		if id, ok := cond["id"]; ok {
+			if err := tx.Where("id = ?", id).Updates(dataUpdate).Error; err != nil {
+				if err == gorm.ErrRecordNotFound {
+					return common.RecordNoFound
+				}
 
-	return nil
+				return common.ErrDB(err)
+			}
+		}
+
+		return nil
+	})
 }
