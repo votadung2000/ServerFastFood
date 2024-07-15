@@ -8,11 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *sqlStorage) CreateDeliveryAddress(ctx context.Context, id int, data *modelDeliveryAddress.CreateDeliveryAddress) error {
+func (s *sqlStorage) CreateDeliveryAddress(ctx context.Context, userId int, data *modelDeliveryAddress.CreateDeliveryAddress) error {
 	return s.db.Transaction(func(tx *gorm.DB) error {
 		if data.Default == modelDeliveryAddress.DEFAULT {
 			if err := tx.Table(modelDeliveryAddress.DeliveryAddress{}.TableName()).
-				Where("user_id = ? and `default` = ?", id, modelDeliveryAddress.DEFAULT).
+				Where("user_id = ? and `default` = ?", userId, modelDeliveryAddress.DEFAULT).
 				Update("`default`", modelDeliveryAddress.NOT_DEFAULT).Error; err != nil {
 				if err == gorm.ErrRecordNotFound {
 					return common.RecordNoFound

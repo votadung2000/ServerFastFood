@@ -16,6 +16,8 @@ func UpdateDeliveryAddressHdl(db *gorm.DB) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id, err := strconv.Atoi(ctx.Param("id"))
 
+		user := ctx.MustGet(common.CurrentUser).(common.Requester)
+
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, common.ErrInternalRequest(err))
 			return
@@ -31,7 +33,7 @@ func UpdateDeliveryAddressHdl(db *gorm.DB) gin.HandlerFunc {
 		store := storageDeliveryAddress.NewSQLStorage(db)
 		business := bizDeliveryAddress.NewUpdateDeliveryAddressBiz(store)
 
-		if err := business.UpdateDeliveryAddress(ctx.Request.Context(), id, &data); err != nil {
+		if err := business.UpdateDeliveryAddress(ctx.Request.Context(), user.GetUserId(), id, &data); err != nil {
 			ctx.JSON(http.StatusBadRequest, err)
 			return
 		}

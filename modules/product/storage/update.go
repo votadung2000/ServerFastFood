@@ -14,8 +14,7 @@ func (s *sqlStorage) UpdateProduct(
 	dataUpdate *modelProduct.ProductUpdate,
 ) error {
 	if err := s.db.Where(cond).
-		Updates(dataUpdate).
-		First(dataUpdate).Error; err != nil {
+		Updates(dataUpdate).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.RecordNoFound
 		}

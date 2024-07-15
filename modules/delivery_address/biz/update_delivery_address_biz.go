@@ -25,7 +25,7 @@ func NewUpdateDeliveryAddressBiz(store UpdateDeliveryAddressStorage) *updateDeli
 
 func (biz *updateDeliveryAddressBiz) UpdateDeliveryAddress(
 	ctx context.Context,
-	id int,
+	userId, id int,
 	data *modelDeliveryAddress.DeliveryAddressUpdate,
 ) error {
 	address, err := biz.store.FindDeliveryAddress(ctx, map[string]interface{}{"id": id})
@@ -42,7 +42,7 @@ func (biz *updateDeliveryAddressBiz) UpdateDeliveryAddress(
 		return err
 	}
 
-	if err := biz.store.UpdateCategory(ctx, map[string]interface{}{"id": id}, data); err != nil {
+	if err := biz.store.UpdateCategory(ctx, map[string]interface{}{"user_id": userId, "id": id}, data); err != nil {
 		return err
 	}
 

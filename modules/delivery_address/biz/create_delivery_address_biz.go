@@ -6,7 +6,7 @@ import (
 )
 
 type CreateDeliveryAddressStorage interface {
-	CreateDeliveryAddress(ctx context.Context, id int, data *modelDeliveryAddress.CreateDeliveryAddress) error
+	CreateDeliveryAddress(ctx context.Context, userId int, data *modelDeliveryAddress.CreateDeliveryAddress) error
 }
 
 type createDeliveryAddressBiz struct {
@@ -19,16 +19,16 @@ func NewCreateDeliveryAddressBiz(store CreateDeliveryAddressStorage) *createDeli
 
 func (biz *createDeliveryAddressBiz) CreateDeliveryAddress(
 	ctx context.Context,
-	id int,
+	userId int,
 	data *modelDeliveryAddress.CreateDeliveryAddress,
 ) error {
-	data.SetUserId(id)
+	data.SetUserId(userId)
 
 	if err := data.Validate(); err != nil {
 		return err
 	}
 
-	if err := biz.store.CreateDeliveryAddress(ctx, id, data); err != nil {
+	if err := biz.store.CreateDeliveryAddress(ctx, userId, data); err != nil {
 		return err
 	}
 
