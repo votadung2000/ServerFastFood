@@ -99,5 +99,10 @@ func Router() {
 		}
 	}
 
-	router.Run(":3000")
+	port := os.Getenv("APP_PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	router.Run(":" + port)
 }
