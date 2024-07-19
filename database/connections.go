@@ -9,9 +9,16 @@ import (
 )
 
 func Connections() *gorm.DB {
-	env := os.Getenv("API_HOST")
+	env := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	pass := os.Getenv("DB_PASS")
+	name := os.Getenv("DB_NAME")
+	port := os.Getenv("DB_PORT")
+	charset := os.Getenv("DB_CHARSET")
+	parseTime := os.Getenv("DB_PARSE_TIME")
+	loc := os.Getenv("DB_LOC")
 
-	dsn := "root:pass-server-mysql@tcp(" + env + ":3306)/go_fast_food_db?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := user + ":" + pass + "@tcp(" + env + ":" + port + ")/" + name + "?charset=" + charset + "&parseTime=" + parseTime + "&loc=" + loc
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
