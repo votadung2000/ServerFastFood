@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: app-fast-food
+    image: app-fast-food:1.0
     depends_on:
       - db
     environment:
