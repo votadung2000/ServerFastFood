@@ -2,21 +2,21 @@ services:
   db:
     image: mysql:8.0
     container_name: db-mysql
-    ports:
-      - "3306:3306"
     environment:
       - MYSQL_DATABASE=$DB_NAME
       - MYSQL_ROOT_PASSWORD=$DB_PASS
+    restart: always
     volumes:
       - db_data:/var/lib/mysql
     networks:
-      - server-network
+      - web
 
   server:
     build:
       context: .
       dockerfile: Dockerfile
     image: server-fast-food:1.0
+    restart: always
     depends_on:
       - db
     environment:
@@ -29,12 +29,12 @@ services:
       - DB_NAME=$DB_NAME
       - SECRET_JWT=$SECRET_JWT
     ports:
-      - "8081:8080"
+      - ":8080"
     networks:
-      - server-network
+      - web
     
 volumes:
   db_data:
 
 networks:
-  server-network:
+  web:
