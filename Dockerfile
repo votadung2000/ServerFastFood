@@ -8,6 +8,8 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
+# COPY ./static ./static
+
 COPY . .
 
 # RUN go mod init SERVERFASTFOOD
@@ -23,6 +25,8 @@ WORKDIR /root/
 COPY --from=builder /app/main .
 
 COPY --from=builder /app/.env .
+
+# COPY --from=builder /app/static ./static
 
 # CMD ["./main"]
 ENTRYPOINT [ "./main" ]

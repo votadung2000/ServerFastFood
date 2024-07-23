@@ -31,7 +31,9 @@ services:
       - DB_NAME=$DB_NAME
       - SECRET_JWT=$SECRET_JWT
     ports:
-      - "8081:8080"
+      - "8082:8080"
+    volumes:
+      - ./static:/root/static
     networks:
       - server-network
     
