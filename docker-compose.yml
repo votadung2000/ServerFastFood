@@ -1,3 +1,5 @@
+version: '3.7'
+
 services:
   db:
     image: mysql:8.0
@@ -7,34 +9,34 @@ services:
       - MYSQL_ROOT_PASSWORD=$DB_PASS
     restart: always
     volumes:
-      - db_data:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
+    labels:
+      - "traefik.enable=false"    
     networks:
       - web
 
-  server:
+  fast_food:
     build:
       context: .
       dockerfile: Dockerfile
-    image: server-fast-food:1.0
-    restart: always
-    depends_on:
-      - db
-    environment:
-      - GIN_MODE=$GIN_MODE
-      - APP_PORT=$APP_PORT
-      - DB_HOST=$DB_HOST
-      - DB_PORT=$DB_PORT
-      - DB_USER=$DB_USER
-      - DB_PASS=$DB_PASS
-      - DB_NAME=$DB_NAME
-      - SECRET_JWT=$SECRET_JWT
-    ports:
-      - ":8080"
+    image: server-fast-food:1.0.0
+    container_name: fast_food_container
     networks:
-      - web
-    
-volumes:
-  db_data:
+      - web  
+    restart: always
+    ports:
+      - '8724:8080'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fast-food.rule=Host(`fast-food.ambition.io.vn`)"
+
+      - "traefik.http.routers.fast-food.tls=true"
+      - "traefik.http.services.fast-food.loadbalancer.server.port=8080"
+
+      - traefik.http.middlewares.fastfood-redirect.redirectregex.regex=^http://www\.(.*)
+      - "traefik.http.middlewares.fastfood-redirect.redirectregex.replacement=http://$${1}"
+      - "traefik.http.routers.fast-food.middlewares=fastfood-redirect"   
 
 networks:
   web:
+    external: true  
