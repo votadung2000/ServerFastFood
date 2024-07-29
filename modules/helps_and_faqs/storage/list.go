@@ -4,7 +4,6 @@ import (
 	"context"
 	"fastFood/common"
 	modelFAQ "fastFood/modules/helps_and_faqs/model"
-	modelProduct "fastFood/modules/product/model"
 
 	"gorm.io/gorm"
 )
@@ -29,9 +28,9 @@ func (s *sqlStorage) ListFAQ(
 	if f := filter; f != nil {
 		fStatus := f.Status
 		if fStatus != 0 {
-			db = db.Where("products.status = ?", fStatus)
+			db = db.Where("status = ?", fStatus)
 		} else {
-			db = db.Where("products.status = ?", modelProduct.STATUS_ACTION)
+			db = db.Where("status = ?", modelFAQ.STATUS_ACTION)
 		}
 	}
 
