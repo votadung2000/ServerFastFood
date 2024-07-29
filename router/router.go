@@ -8,6 +8,7 @@ import (
 	ginCategory "fastFood/modules/category/transport/gin"
 	ginDeliveryAddress "fastFood/modules/delivery_address/transport/gin"
 	ginFavorite "fastFood/modules/favorite/transport/gin"
+	ginFAQ "fastFood/modules/helps_and_faqs/transport/gin"
 	ginOrder "fastFood/modules/order/transport/gin"
 	ginProduct "fastFood/modules/product/transport/gin"
 	ginUpload "fastFood/modules/upload/transport/gin"
@@ -96,6 +97,11 @@ func Router() {
 		verification := v1.Group("/verification")
 		{
 			verification.POST("", ginVerification.CreateVerificationHdl(db, tokenProvider))
+		}
+
+		faq := v1.Group("/helps_and_faqs", middlewareAuth)
+		{
+			faq.POST("", ginFAQ.CreateFAQHdl(db))
 		}
 	}
 
