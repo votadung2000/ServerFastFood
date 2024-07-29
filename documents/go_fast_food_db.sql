@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: go_fast_food_db
--- Generation Time: 2024-07-29 09:17:23.1490
+-- Generation Time: 2024-07-29 14:34:49.9090
 -- -------------------------------------------------------------
 
 
@@ -57,6 +57,16 @@ CREATE TABLE `favorites` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `helps_and_faqs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `question` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `answer` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `status` int NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `images` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -159,6 +169,17 @@ INSERT INTO `favorites` (`id`, `product_id`, `user_id`, `status`, `created_at`, 
 (1, 1, 1, 1, '2024-03-19 06:43:25', '2024-03-19 06:43:25'),
 (2, 2, 1, 1, '2024-03-19 07:09:59', '2024-03-19 07:09:59');
 
+INSERT INTO `helps_and_faqs` (`id`, `question`, `answer`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'How do I place an order?', 'To place an order, browse through the available restaurants and menu items, add your desired items to the cart, and proceed to checkout. Enter your delivery address, select a payment method, and confirm your order.', 1, '2024-07-29 07:28:48', '2024-07-29 07:28:48'),
+(2, 'Can I track my order in real-time?', 'Yes, you can track your order in real-time. After placing your order, go to the \"Orders\" section in the app. You\'ll see the status of your order and the estimated delivery time.', 1, '2024-07-29 07:30:53', '2024-07-29 07:30:53'),
+(3, 'What payment methods are accepted?', 'We accept various payment methods, including credit/debit cards, PayPal, and cash on delivery. You can select your preferred payment method at checkout.', 1, '2024-07-29 07:31:18', '2024-07-29 07:31:18'),
+(4, 'How do I apply a discount code?', 'To apply a discount code, go to the checkout page and enter the code in the \"Promo Code\" field. Make sure to click \"Apply\" to ensure the discount is deducted from your total amount.', 1, '2024-07-29 07:31:47', '2024-07-29 07:31:47'),
+(5, 'What should I do if I encounter an issue with my order?', 'If you encounter any issues with your order, please contact our customer support team through the \"Help\" section in the app. Provide your order details, and our team will assist you in resolving the problem.', 1, '2024-07-29 07:32:21', '2024-07-29 07:32:21'),
+(6, 'How do I update my delivery address?', 'To update your delivery address, go to the \"Profile\" section in the app and select \"Addresses\". You can add a new address or edit an existing one. Make sure to set the correct address as the default for future orders.', 1, '2024-07-29 07:33:10', '2024-07-29 07:33:10'),
+(7, 'What should I do if I forgot my password?', 'If you forgot your password, go to the login page and select \"Forgot Password\". Enter your registered email address, and we\'ll send you instructions to reset your password.', 1, '2024-07-29 07:33:41', '2024-07-29 07:33:41'),
+(8, 'How can I cancel my order?', 'To cancel your order, go to the \"Orders\" section in the app and select the order you wish to cancel. If the order has not been processed yet, you\'ll see an option to cancel it. Please note that once the order is being prepared, cancellation may not be possible.', 1, '2024-07-29 07:34:00', '2024-07-29 07:34:00'),
+(9, 'Are there any delivery fees?', 'Delivery fees vary depending on the restaurant and your location. The delivery fee will be displayed on the checkout page before you confirm your order.', 1, '2024-07-29 07:34:19', '2024-07-29 07:34:19');
+
 INSERT INTO `images` (`id`, `url`, `width`, `height`, `cloud_name`, `extension`, `created_at`, `updated_at`) VALUES
 (1, 'static/1709775915665309000_burger.png', 512, 512, 'local', '.png', '2024-03-07 08:45:16', '2024-03-07 08:45:16'),
 (2, 'static/1709775925414981000_pizza.png', 512, 512, 'local', '.png', '2024-03-07 08:45:25', '2024-03-07 08:45:25'),
@@ -184,7 +205,7 @@ INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `product_name`, `statu
 (12, 9, 3, 'Seafood Burger', 1, 4, 10.00, '2024-05-23 07:10:15', '2024-05-23 07:10:15');
 
 INSERT INTO `orders` (`id`, `user_id`, `status`, `tax_fees`, `delivery_fee`, `total`, `coupon_id`, `created_at`, `canceled_at`, `completed_at`, `delivery_at`) VALUES
-(9, 1, 1, 0.00, 0.00, 56.00, 0, '2024-05-23 07:10:15', NULL, NULL, NULL);
+(9, 1, 5, 0.00, 0.00, 56.00, 0, '2024-05-23 07:10:15', NULL, NULL, NULL);
 
 INSERT INTO `products` (`id`, `name`, `image_id`, `taste`, `price`, `category_id`, `discount`, `status`, `description`, `quantity`, `sold`, `featured`, `created_at`, `updated_at`) VALUES
 (1, 'Beef Burger', 5, 'Spicy', 8, 1, 0, 1, 'Description Beef Burger', 100, 2, 1, '2024-03-07 04:33:13', '2024-05-23 07:10:15'),
@@ -200,7 +221,7 @@ INSERT INTO `products` (`id`, `name`, `image_id`, `taste`, `price`, `category_id
 (11, 'Banana', 15, 'Normal', 12, 4, 5, 1, 'Description Banana', 100, 0, 2, '2024-03-18 08:01:16', '2024-05-23 04:42:54');
 
 INSERT INTO `users` (`id`, `name`, `user_name`, `password`, `salt`, `phone_number`, `email`, `status`, `address`, `role`, `avatar_id`, `created_at`, `updated_at`) VALUES
-(1, 'User 1 updated', 'register1', 'e47cc3f5a5d88a7719f6a06408dc37f1', 'JlMOCUofftIAiGnqnGUIpGrEOWHCfmVQKbEOaKdSTlfqraxdCv', '0987654321', 'register1@gmail.com', 1, '123 demo user 11', 1, 18, '2024-03-05 13:53:22', '2024-05-06 04:45:59'),
+(1, 'User 1 updated', 'register1', 'f135504c0fca0bec0a232e12f4ca6be1', 'jSizLmMWMDXSONYZmDpBJeWFRTuzStMxSdVefUSaJZsDrtxNDr', '0987654321', 'register1@gmail.com', 1, '123 demo user 11', 1, 18, '2024-03-05 13:53:22', '2024-07-29 06:09:24'),
 (2, 'USER 2', 'register2', '8eb9ce668ac514f363f2edb071ebdda4', 'QIfqXoiQsVsTiPkFvGIwypdFEVFCAytxMnTvoZcwILDpBIJTgr', '0987654311', 'register2@gmail.com', 1, '123 demo demo', 1, 0, '2024-05-02 11:07:53', '2024-05-07 01:47:59');
 
 
