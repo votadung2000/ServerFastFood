@@ -6,6 +6,12 @@ import (
 )
 
 const (
+	STATUS_ACTION  = 1
+	STATUS_BLOCK   = -1
+	STATUS_DELETED = -2
+)
+
+const (
 	EntityName = "FAQ"
 )
 
