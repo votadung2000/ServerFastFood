@@ -102,6 +102,7 @@ func Router() {
 		faq := v1.Group("/helps_and_faqs", middlewareAuth)
 		{
 			faq.POST("", ginFAQ.CreateFAQHdl(db))
+			faq.GET("", ginFAQ.ListFAQHdl(db))
 		}
 	}
 
