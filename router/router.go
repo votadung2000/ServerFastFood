@@ -103,6 +103,7 @@ func Router() {
 		{
 			faq.POST("", ginFAQ.CreateFAQHdl(db))
 			faq.GET("", ginFAQ.ListFAQHdl(db))
+			faq.DELETE("/:id", ginFAQ.DeleteFAQHdl(db))
 		}
 	}
 
