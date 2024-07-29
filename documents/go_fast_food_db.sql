@@ -1,10 +1,10 @@
 -- -------------------------------------------------------------
--- TablePlus 6.0.4(556)
+-- TablePlus 6.1.2(568)
 --
 -- https://tableplus.com/
 --
 -- Database: go_fast_food_db
--- Generation Time: 2024-05-24 14:59:42.9440
+-- Generation Time: 2024-07-29 09:17:23.1490
 -- -------------------------------------------------------------
 
 
@@ -32,16 +32,21 @@ CREATE TABLE `delivery_address` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `status` int NOT NULL DEFAULT '1',
+  `type` int NOT NULL DEFAULT '1',
+  `default` int NOT NULL DEFAULT '0',
   `recipient_name` varchar(100) NOT NULL,
+  `phone_number` varchar(20) NOT NULL,
   `street_address` varchar(255) NOT NULL,
   `country` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `city` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `postal_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
+  `lat` float DEFAULT NULL,
+  `lon` float DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `favorites` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -146,8 +151,9 @@ INSERT INTO `categories` (`id`, `name`, `image_id`, `status`, `created_at`, `upd
 (3, 'Sandwich', 3, 1, '2024-03-05 09:26:12', '2024-03-07 01:46:06'),
 (4, 'Fruits', 4, 1, '2024-03-05 09:26:16', '2024-03-07 01:46:15');
 
-INSERT INTO `delivery_address` (`id`, `user_id`, `status`, `recipient_name`, `street_address`, `country`, `city`, `postal_code`, `description`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'USER 1', 'Hẻm 59 Hồng Lạc Phường 10 Quận Tân Bình', 'Việt Nam', 'Thành phố Hồ Chí Minh', '72117', '', '2024-05-24 07:12:15', '2024-05-24 07:12:15');
+INSERT INTO `delivery_address` (`id`, `user_id`, `status`, `type`, `default`, `recipient_name`, `phone_number`, `street_address`, `country`, `city`, `postal_code`, `description`, `lat`, `lon`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, 1, 'Test', '0987654322', 'Ellis Street, South of Market', 'United States', 'San Francisco', '94104', '', 37.7858, -122.406, '2024-07-29 02:10:26', '2024-07-29 02:10:26'),
+(2, 1, 1, 3, -1, 'Demo 2', '0987612345', '123 Ellis Street, South of Market', 'United States', 'San Francisco', '94104', '', 37.7858, -122.406, '2024-07-29 02:11:12', '2024-07-29 02:11:12');
 
 INSERT INTO `favorites` (`id`, `product_id`, `user_id`, `status`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 1, '2024-03-19 06:43:25', '2024-03-19 06:43:25'),
