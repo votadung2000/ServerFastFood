@@ -18,6 +18,7 @@ type FAQ struct {
 	common.SQLModel
 	Question string `json:"question" gorm:"column:question;"`
 	Answer   string `json:"answer" gorm:"column:answer;"`
+	Status   int    `json:"status" gorm:"column:status;"`
 }
 
 func (FAQ) TableName() string {
