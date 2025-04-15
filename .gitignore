@@ -1,1 +1,51 @@
+# ===============================
+# 🔧 Go build and test artifacts
+# ===============================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.log
+
+# Thư mục chứa binary (nếu có)
+bin/
+build/
+dist/
+
+# ===============================
+# ⚙️ Go module vendor directory
+# ===============================
+vendor/
+
+# ===============================
+# 📁 Env & cấu hình cá nhân
+# ===============================
 .env
+.env.*         # .env.local, .env.dev, etc.
+*.pid
+
+# ===============================
+# 🐳 Docker & container
+# ===============================
+docker-compose.override.yml
+
+# ===============================
+# ⚙️ IDE/editor config files
+# ===============================
+.vscode/
+.idea/
+*.swp
+
+# ===============================
+# 💻 OS-specific files
+# ===============================
+.DS_Store
+Thumbs.db
+
+# ===============================
+# 📦 Static file cache (optional)
+# ===============================
+static/uploads/
